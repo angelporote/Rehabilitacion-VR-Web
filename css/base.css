@@ -1,0 +1,48 @@
+/* =========================================================
+   base.css · Lo común a todas las páginas: colores, tipografía, botones
+   Mismos colores y letra que "Dentro del implante".
+   ========================================================= */
+:root{
+  --night:#0B0A22;         /* fondo profundo */
+  --plasma:#2B1F66;        /* brillo violeta del fondo */
+  --text:#F1EEFF;
+  --dim:#A9A3CF;
+  --glass:rgba(24,19,62,.62);
+  --panel:rgba(18,14,48,.84);
+  --edge:rgba(255,255,255,.14);
+  --bio:#5FF2D2;           /* acento turquesa */
+  --metal:#9FB4FF; --ceramic:#D7C6FF; --polymer:#FFD98A; --bone:#E6D7B8;
+  --font:"Sora",system-ui,sans-serif;
+  --gutter:clamp(1.2rem,4vw,3rem);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:var(--font); color:var(--text); background-color:var(--night);
+  background-image:radial-gradient(ellipse 80% 70% at 65% 40%, var(--plasma) 0%, #15103D 42%, var(--night) 100%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--bio);outline-offset:3px}
+
+/* Barra superior */
+.top{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1.4rem var(--gutter);z-index:5;pointer-events:none}
+.top *{pointer-events:auto}
+.mark{font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;gap:.6rem;text-decoration:none}
+.mark svg{width:22px;height:22px;flex:none}
+.pill{font-size:.82rem;color:var(--dim);border:1px solid var(--edge);border-radius:99px;padding:.4rem .9rem;background:rgba(255,255,255,.04);white-space:nowrap}
+
+/* Botones */
+.cta{display:inline-flex;align-items:center;gap:.8rem;border:0;border-radius:99px;padding:.95rem 1.5rem .95rem 1.7rem;text-decoration:none;
+     background:var(--text);color:var(--night);font-weight:600;font-size:1rem;transition:transform .2s, box-shadow .2s}
+.cta:hover{transform:translateY(-2px);box-shadow:0 10px 40px -10px rgba(95,242,210,.6)}
+.cta i{width:28px;height:28px;border-radius:50%;background:var(--night);display:grid;place-items:center;flex:none}
+.cta i svg{width:14px;height:14px}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem}
+.ghost{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--edge);background:var(--panel);border-radius:99px;padding:.7rem 1.2rem;font-size:.92rem;text-decoration:none}
+.ghost:hover{border-color:rgba(255,255,255,.35)}
+.ghost svg{width:14px;height:14px}
+
+@media (prefers-reduced-motion:reduce){ .cta{transition:none} }

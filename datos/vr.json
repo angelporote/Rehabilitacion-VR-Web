@@ -1,0 +1,44 @@
+{
+  "_ayuda": "Contenido de la página vr/. Para añadir un juego, añade una entrada a 'juegos' con su captura en img/vr/.",
+  "resumen": [
+    { "titulo": "Paciente sentado", "texto": "Todo está a menos de 75 cm de los ojos y unos centímetros por debajo, para jugar sin levantarse." },
+    { "titulo": "Solo con las manos", "texto": "Sin mandos: el seguimiento de manos de las gafas permite agarrar, verter y pulsar con la punta del índice." },
+    { "titulo": "Sin castigos", "texto": "Los errores no restan: el juego informa, deja reintentar y siempre se puede terminar." }
+  ],
+  "juegos": [
+    {
+      "id": "cocina",
+      "nombre": "Receta de Cocina",
+      "lema": "Cocina paso a paso",
+      "imagen": "../img/vr/cocina.jpg",
+      "texto": "El paciente sigue una receta real: coger el paquete, verter la pasta en la olla, remover… Cada acción se detecta con las manos y se comprueba el orden.",
+      "trabaja": ["Secuenciación y planificación", "Movimientos funcionales de la vida diaria", "Memoria de procedimiento"],
+      "niveles": "Fácil y Difícil"
+    },
+    {
+      "id": "memoria",
+      "nombre": "Memoria de cartas",
+      "lema": "Encuentra las parejas",
+      "imagen": "../img/vr/memoria.jpg",
+      "texto": "Un tablero de cartas boca abajo. Se dan la vuelta tocándolas y hay que encontrar todas las parejas con el menor número de intentos.",
+      "trabaja": ["Memoria visual a corto plazo", "Atención", "Alcance y precisión del brazo"],
+      "niveles": "Fácil, Normal y Difícil"
+    },
+    {
+      "id": "bingo",
+      "nombre": "Bingo",
+      "lema": "Recuerda tu cartón",
+      "imagen": "../img/vr/bingo.jpg",
+      "texto": "El paciente memoriza un cartón de 4 números. Después salen bolas de una en una: si el número es suyo, la coge y la mete en su cesta.",
+      "trabaja": ["Memoria de trabajo", "Atención e inhibición", "Velocidad de reacción"],
+      "niveles": "Fácil, Normal y Difícil"
+    }
+  ],
+  "informe": {
+    "texto": "Al terminar cada partida, las gafas guardan un informe para el terapeuta: un archivo por sesión y una tabla resumen que se abre directamente con Excel.",
+    "medidas": ["Duración y nivel", "Aciertos, omisiones y falsas alarmas", "Errores de secuencia y perseveraciones", "Tiempos de reacción por paso"],
+    "privacidad": "Nunca se guarda el nombre del paciente, solo un código: son datos de salud."
+  },
+  "tecnologia": ["Pico 4 Ultra", "Unity 6", "URP", "OpenXR + PICO SDK", "XR Interaction Toolkit 3.4", "XR Hands"],
+  "estado": "Prototipo en desarrollo. Siguiente paso: un selector de paciente en el Lobby."
+}

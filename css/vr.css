@@ -1,0 +1,63 @@
+/* =========================================================
+   vr.css · Páginas de proyecto (de lectura, con scroll). Hoy: vr/
+   ========================================================= */
+body.pagina{min-height:100vh;line-height:1.6}
+body.pagina .top{position:sticky;background:linear-gradient(180deg,rgba(11,10,34,.92),rgba(11,10,34,0));padding-bottom:1.6rem}
+main{max-width:1180px;margin:0 auto;padding:0 var(--gutter)}
+
+/* Cabecera del proyecto */
+.cabecera{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(1.5rem,4vw,3.5rem);align-items:center;padding:clamp(1rem,5vh,3rem) 0 clamp(2.5rem,8vh,5rem)}
+.cabecera small{display:block;color:var(--bio);font-size:.9rem;margin-bottom:1rem}
+.cabecera h1{font-size:clamp(2.4rem,5.2vw,4.2rem);line-height:1.02;font-weight:700;letter-spacing:-.04em;margin:0 0 1.2rem}
+.cabecera h1 span{display:block;font-weight:300;color:var(--dim);font-size:.62em;letter-spacing:-.03em;margin-top:.4rem}
+.cabecera p{color:#D3CEF0;font-size:1.05rem;margin:0 0 1.5rem;max-width:48ch}
+.cabecera strong{color:var(--text)}
+.chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.45rem}
+.chips li{font-size:.8rem;color:var(--dim);border:1px solid var(--edge);border-radius:99px;padding:.3rem .75rem;background:rgba(255,255,255,.04)}
+
+/* Captura enmarcada como una pantalla */
+.marco{margin:0;border:1px solid var(--edge);border-radius:20px;padding:.6rem;background:var(--glass);box-shadow:0 30px 80px -30px rgba(95,242,210,.35)}
+.marco img{display:block;width:100%;height:auto;border-radius:14px}
+.marco figcaption{color:var(--dim);font-size:.82rem;padding:.7rem .4rem .2rem}
+
+/* Bloques de contenido */
+.bloque{padding:clamp(2rem,6vh,3.5rem) 0;border-top:1px solid var(--edge)}
+.bloque h2{font-size:clamp(1.6rem,3vw,2.3rem);letter-spacing:-.03em;margin:0 0 1.2rem;line-height:1.1}
+.intro{color:var(--dim);margin:-.4rem 0 1.6rem;max-width:60ch}
+.rejilla{display:grid;gap:1rem}
+.rejilla.tres{grid-template-columns:repeat(3,1fr)}
+.tarjeta{border:1px solid var(--edge);background:var(--panel);border-radius:18px;padding:1.3rem}
+.tarjeta .num{display:inline-block;font-size:.78rem;font-weight:600;color:var(--bio);margin-bottom:.6rem}
+.tarjeta h3{margin:0 0 .4rem;font-size:1.15rem;letter-spacing:-.01em}
+.tarjeta p{margin:0;color:var(--dim);font-size:.93rem}
+
+/* Juegos: captura + texto, alternando lados */
+.juegos{display:grid;gap:1.4rem}
+.juego{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(1rem,3vw,2rem);align-items:center;border:1px solid var(--edge);background:var(--panel);border-radius:22px;padding:clamp(.7rem,1.5vw,1rem)}
+.juego:nth-child(even) img{order:2}
+.juego img{display:block;width:100%;height:auto;border-radius:14px}
+.juego-texto{padding:.5rem clamp(.3rem,1.5vw,1rem)}
+.juego small{color:var(--bio);font-size:.85rem}
+.juego h3{margin:.2rem 0 .6rem;font-size:clamp(1.4rem,2.4vw,1.9rem);letter-spacing:-.03em}
+.juego p{margin:0 0 1rem;color:#D3CEF0;font-size:.95rem}
+.trabaja b{display:block;font-size:.85rem;margin-bottom:.4rem}
+.trabaja ul,.lista{list-style:none;margin:0 0 1rem;padding:0}
+.trabaja li,.lista li{position:relative;padding-left:1.1rem;margin-bottom:.35rem;color:#D9D4F5;font-size:.92rem}
+.trabaja li::before,.lista li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--bio)}
+.niveles{display:inline-block;font-size:.78rem;color:var(--dim);border:1px solid var(--edge);border-radius:99px;padding:.2rem .7rem}
+
+/* Informe y estado */
+.informe{display:grid;grid-template-columns:1.2fr 1fr;gap:2rem;align-items:start}
+.informe p{color:#D3CEF0;margin:0 0 1rem;max-width:52ch}
+.informe .aviso{color:var(--bio);font-size:.92rem}
+.informe .lista{border:1px solid var(--edge);background:var(--panel);border-radius:18px;padding:1.3rem 1.3rem .6rem}
+.estado p{color:#D3CEF0;margin:0}
+
+.pie{max-width:1180px;margin:0 auto;padding:2rem var(--gutter) 3rem;display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;color:var(--dim);font-size:.85rem;border-top:1px solid var(--edge)}
+
+@media (max-width:860px){
+  .cabecera,.juego,.informe{grid-template-columns:1fr}
+  .juego:nth-child(even) img{order:0}
+  .rejilla.tres{grid-template-columns:1fr}
+}
+@media (max-width:480px){ body.pagina .pill{display:none} }
