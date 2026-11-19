@@ -37,7 +37,7 @@ html,body.lobby{height:100%;overflow:hidden}
 .indicador canvas{display:block;width:150px;height:170px;margin:0 auto}
 
 /* Mano VR en el centro (ratón capturado). La punta del índice marca el centro exacto */
-.mano{position:fixed;left:50%;top:50%;width:44px;height:44px;margin:-3px 0 0 -16px;z-index:4;pointer-events:none;display:none;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+.mano{position:fixed;left:50%;top:50%;width:56px;height:56px;margin:-5.6px 0 0 -19.6px;z-index:4;pointer-events:none;display:none;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
 [data-modo="libre"] .mano{display:block}
 .mano.toca{animation:toca .25s ease-out}
 @keyframes toca{40%{transform:translateY(-6px) scale(.9)}100%{transform:none}}
