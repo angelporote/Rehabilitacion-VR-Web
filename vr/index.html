@@ -18,6 +18,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/base.css">
 <link rel="stylesheet" href="../css/lobby.css">
+<!-- Si venimos de la cinemática de la portada, empezamos "dentro de las gafas" (pantalla negra) -->
+<script>try{ if(sessionStorage.getItem('rvr-cinematica')) document.documentElement.classList.add('cinematica'); }catch(e){}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script type="importmap">
 { "imports": {
@@ -31,17 +33,21 @@
 
 <canvas id="scene" aria-label="El Lobby en 3D: una habitación con una mesa y la pantalla para elegir un juego"></canvas>
 <div class="loader" id="loader">Entrando en el Lobby…</div>
+<div class="visor" id="visor" aria-hidden="true"></div>
 
 <div class="lobby-ui">
-  <a class="ghost salir" href="../">
+  <a class="ghost salir" id="salir" href="../">
     <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4L3 8l4 4"/></svg>
     Quitarse las gafas
   </a>
 
-  <!-- Botón para "convertir la web en un videojuego" -->
+  <!-- Las tarjetas de la pantalla, como botones para usarlas con teclado (invisibles; resaltan la tarjeta) -->
+  <nav id="tarjetasTeclado" aria-label="Juegos de la pantalla"></nav>
+
+  <!-- Botón para "convertir la web en un videojuego" (también con la tecla L) -->
   <button class="libre" id="libre">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2.2"/><path d="M12 8v6l-3 6M12 14l3 6M8 11h8"/></svg>
-    Muévete libremente por la lobby
+    Muévete libremente por la lobby <kbd>L</kbd>
   </button>
   <p class="solo-raton">Para moverte libremente necesitas teclado y ratón.</p>
 
@@ -59,7 +65,7 @@
 
 <!-- Mano VR en el centro de la vista cuando el ratón está capturado -->
 <img class="mano" id="mano" src="../img/cursor/dedo.svg" alt="" aria-hidden="true">
-<div class="pausa">Haz clic para seguir moviéndote · <kbd>R</kbd> para volver a la pantalla</div>
+<div class="pausa">Haz clic para mirar con el ratón · <kbd>←→</kbd> girar · <kbd>R</kbd> volver a la pantalla</div>
 
 <!-- Ficha de un juego (provisional) -->
 <aside class="ficha" id="ficha" aria-live="polite">

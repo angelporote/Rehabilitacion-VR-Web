@@ -1,5 +1,5 @@
 {
-  "_ayuda": "Contenido del proyecto VR. 'juegos' alimenta las tarjetas de la pantalla del Lobby (vr/) y la versión en texto (vr/info.html). 'icono' es un dibujo de js/lobby/pantalla.js (olla, cartas, bolas). Para añadir un juego, añade una entrada y su captura en img/vr/.",
+  "_ayuda": "Contenido del proyecto VR. 'juegos' alimenta las tarjetas de la pantalla del Lobby (vr/) y la versión en texto (vr/info.html). 'lobby.huecos' es cuántas tarjetas tiene la pantalla (como en las gafas: 6, en filas de 3); los huecos sin juego salen como 'Próximamente' con candado. 'icono' es un dibujo de js/lobby/pantalla.js (olla, cartas, bolas). Para añadir un juego, añade una entrada y su captura en img/vr/.",
   "resumen": [
     {
       "titulo": "Paciente sentado",
@@ -57,7 +57,7 @@
         "Velocidad de reacción"
       ],
       "niveles": "Fácil, Normal y Difícil",
-      "color": "#E8643C",
+      "color": "#E8A93A",
       "icono": "bolas"
     }
   ],
@@ -79,5 +79,12 @@
     "XR Interaction Toolkit 3.4",
     "XR Hands"
   ],
-  "estado": "Prototipo en desarrollo. Siguiente paso: un selector de paciente en el Lobby."
+  "estado": "Prototipo en desarrollo. Siguiente paso: un selector de paciente en el Lobby.",
+  "lobby": {
+    "huecos": 6,
+    "bloqueado": {
+      "nombre": "Próximamente",
+      "lema": "Nuevo juego"
+    }
+  }
 }

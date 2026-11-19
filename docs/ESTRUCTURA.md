@@ -52,8 +52,8 @@ js/vr/main.js ─────> js/nucleo/datos.js        (versión en texto, sin
 
 Es lo que se ve al entrar en las gafas. Tiene dos modos (atributo `data-modo` del `<body>`):
 
-- **pantalla**: vista sentada frente al monitor "Elige un juego". Al tocar una tarjeta se abre la ficha del juego (provisional).
-- **libre**: primera persona. Se entra con el botón "Muévete libremente por la lobby", que captura el ratón (pointer lock). WASD o flechas para caminar, ratón para mirar, clic para tocar la pantalla (hay que estar a menos de 3,5 m), **R** para volver a la pantalla, Esc para soltar el ratón. Si el navegador no deja capturar el ratón, se mira arrastrando.
+- **pantalla**: vista sentada frente al monitor "Elige un juego", con 6 tarjetas en filas de 3 como en las gafas (los huecos sin juego salen como "Próximamente" con candado). Al tocar una tarjeta se abre la ficha del juego (provisional).
+- **libre**: primera persona. Se entra con el botón "Muévete libremente por la lobby" o la tecla **L**, que captura el ratón (pointer lock). W/S o ↑/↓ para avanzar y retroceder, A/D de lado, ←/→ o Q/E para girar, ratón para mirar, clic o Enter para tocar la pantalla donde apunta la mano (a menos de 3,5 m), **R** para volver a la pantalla, Esc para soltar el ratón. Si el navegador no deja capturar el ratón, se mira arrastrando.
 
 | Archivo | Qué hace |
 |---|---|
@@ -71,6 +71,22 @@ La misma información sin 3D. `js/vr/main.js` rellena sus secciones con `datos/v
 ### Cursor de mano VR
 
 Dos dibujos SVG en `img/cursor/` (`mano.svg` abierta y `dedo.svg` apuntando), incrustados en `css/base.css` como `--cursor-mano` y `--cursor-dedo`. En el modo libre, con el ratón capturado, la mano se dibuja en el centro de la pantalla.
+
+## Cinemáticas de ponerse y quitarse las gafas
+
+- **Ponerse** (`entrar` en `js/portada/main.js`): las gafas se levantan de la mesita, se giran para enseñar las lentes, se acercan a la cara y la vista se cierra en dos círculos (el `.visor` de `css/base.css`, con su radio en `--r`). Deja la marca `rvr-cinematica` en `sessionStorage` y el Lobby empieza con las lentes cerradas y las abre.
+- **Quitarse** (`quitarseGafas` en `js/lobby/main.js` y en `js/portada/main.js`): el Lobby cierra las lentes y deja la marca `rvr-quitar`; la portada empieza con las gafas pegadas a la cara, abre las lentes y las gafas vuelven a la mesita.
+
+## Teclado
+
+Todo se puede usar sin ratón:
+
+| Dónde | Teclas |
+|---|---|
+| Portada | `Tab` hasta la etiqueta de las gafas, `←→↑↓` las giran, `Enter` entra |
+| Lobby, modo pantalla | `Tab` o `←→↑↓` entre las tarjetas (botones ocultos que resaltan la tarjeta), `Enter` abre la ficha, `L` modo libre |
+| Lobby, modo libre | `W A S D`, `↑↓` caminar, `←→`/`Q E` girar, `Enter`/`Espacio` tocar, `R` volver |
+| Fichas | `Esc` cierra y el foco vuelve a donde estaba |
 
 ## Accesibilidad y rendimiento
 

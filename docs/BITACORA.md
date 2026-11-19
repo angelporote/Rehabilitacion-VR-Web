@@ -4,6 +4,22 @@ Diario del trabajo en la web: qué se hizo, qué se decidió (y por qué) y qué
 
 ---
 
+## 19/11/2026 · Seis huecos, cinemáticas y teclado
+
+**Hecho**
+- La pantalla del Lobby tiene **6 tarjetas en filas de 3**, como el Lobby nuevo del proyecto (`GameCatalog`: Cocina, Memoria, Bingo y tres "Próximamente" con candado). Se configura en `datos/vr.json` (`lobby.huecos`).
+- **Cinemática de ponerse las gafas**: en vez de entrar por las lentes, las gafas se levantan, se giran, se acercan a la cara y la vista se cierra en las dos lentes. En el Lobby las lentes se abren.
+- **Cinemática de quitarse las gafas**: "Quitarse las gafas" cierra las lentes; en la portada se abren, las gafas se apartan de la cara y vuelven a la mesita.
+- **Teclado en toda la web**: etiqueta de las gafas con `Tab`, flechas y `Enter`; tarjetas del Lobby con `Tab`/flechas y `Enter`; `L` para el modo libre; en el modo libre `←→`/`Q E` para girar y `Enter` para tocar; `Esc` cierra las fichas.
+
+**Decisiones**
+- En el modo libre, `↑↓` caminan y `←→` giran: así se puede mirar alrededor sin ratón. `A`/`D` siguen moviendo de lado.
+
+**Pendiente**
+- Decidir cómo se muestra la información de cada juego.
+
+---
+
 ## 19/11/2026 · El Lobby en 3D y la mano VR
 
 **Hecho**

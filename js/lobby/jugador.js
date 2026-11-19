@@ -1,6 +1,6 @@
 /* =========================================================
    jugador.js · Moverse en primera persona por la habitación
-   - WASD o flechas para caminar, ratón para mirar
+   - WASD o flechas para caminar, ratón (o ←/→, Q/E) para mirar
    - Colisiones: no se atraviesan las paredes ni los muebles
    ========================================================= */
 import * as THREE from 'three';
@@ -13,7 +13,9 @@ export function crearJugador({ camera, limites, obstaculos, altura = 1.6 }){
   const pos = new THREE.Vector3(0, altura, 0);
   let yaw = 0, pitch = 0, activo = false;
   const teclas = new Set();
-  const CODIGOS = { KeyW:'f', ArrowUp:'f', KeyS:'b', ArrowDown:'b', KeyA:'l', ArrowLeft:'l', KeyD:'r', ArrowRight:'r' };
+  // W/↑ adelante, S/↓ atrás, A/D de lado, ←/→ y Q/E girar (así se puede jugar solo con teclado)
+  const CODIGOS = { KeyW:'f', ArrowUp:'f', KeyS:'b', ArrowDown:'b', KeyA:'l', KeyD:'r', ArrowLeft:'gi', KeyQ:'gi', ArrowRight:'gd', KeyE:'gd' };
+  const GIRO = 1.8;           // rad/s al girar con teclado
 
   addEventListener('keydown', e => { if(activo && CODIGOS[e.code]){ teclas.add(CODIGOS[e.code]); e.preventDefault(); } });
   addEventListener('keyup', e => { if(CODIGOS[e.code]) teclas.delete(CODIGOS[e.code]); });
@@ -49,6 +51,8 @@ export function crearJugador({ camera, limites, obstaculos, altura = 1.6 }){
     if(teclas.has('b')) paso.sub(adelante);
     if(teclas.has('r')) paso.add(derecha);
     if(teclas.has('l')) paso.sub(derecha);
+    if(teclas.has('gi')) yaw += GIRO * dt;
+    if(teclas.has('gd')) yaw -= GIRO * dt;
     if(paso.lengthSq() > 0){ paso.normalize().multiplyScalar(VELOCIDAD * dt); pos.add(paso); }
     resolver();
     // Un leve balanceo al caminar, para que se note el paso
@@ -61,6 +65,7 @@ export function crearJugador({ camera, limites, obstaculos, altura = 1.6 }){
     pos, mirar, actualizar,
     get yaw(){ return yaw; },
     activar(v){ activo = v; if(!v) teclas.clear(); },
+    get activo(){ return activo; },
     // Coloca al jugador en un sitio mirando hacia un punto
     colocar(x, z, mirarA){
       pos.set(x, altura, z); resolver();

@@ -59,7 +59,9 @@ export function crear(){
   [-1, 1].forEach(s=>{ const u = mesh(new THREE.BoxGeometry(0.22, 0.42, 0.9), carcasa, s*1.88, 0.05, -0.85, grupo); u.rotation.y = s*0.08; });
   // Contrapeso trasero
   const bat = mesh(new THREE.ExtrudeGeometry(rrect(1.3, 0.9, 0.3), { depth:0.35, bevelEnabled:true, bevelThickness:0.1, bevelSize:0.08, bevelSegments:5 }), carcasa, 0, 0.05, -1.1 - R*1.35 - 0.2, grupo);
-  mesh(new THREE.CapsuleGeometry(0.025, 0.4, 4, 12), brillo, 0, 0.05, -1.1 - R*1.35 - 0.24, grupo).rotation.z = Math.PI/2;
+  const batLuz = mesh(new THREE.CapsuleGeometry(0.025, 0.4, 4, 12), brillo, 0, 0.05, -1.1 - R*1.35 - 0.24, grupo); batLuz.rotation.z = Math.PI/2;
+  // Lo que queda detrás de la cabeza: en la cinemática de ponérselas se aparta para ver las lentes
+  grupo.userData.trasera = [bat, batLuz, arco];
 
   // Todo proyecta y recibe sombra suave del entorno
   grupo.traverse(o => { if(o.isMesh) o.userData.esGafas = true; });

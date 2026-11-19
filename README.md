@@ -4,7 +4,7 @@
 
 **Web:** https://angelporote.github.io/Rehabilitacion-VR-Web/
 
-La portada es un salón de casa al atardecer con unas **gafas de realidad virtual** sobre una mesita. Las gafas flotan y se pueden girar con el ratón o el dedo. Al tocarlas, la cámara entra por las lentes y apareces en el **Lobby** de RehabilitaciónVR (`vr/`), la habitación desde la que se eligen los juegos en las gafas Pico 4 Ultra. Primero ves la pantalla "Elige un juego"; con el botón **Muévete libremente por la lobby** la web se convierte en un videojuego en primera persona (WASD o flechas y ratón, con colisiones), y **R** te devuelve a la pantalla. El cursor es una mano VR.
+La portada es un salón de casa al atardecer con unas **gafas de realidad virtual** sobre una mesita. Las gafas flotan y se pueden girar con el ratón o el dedo. Al tocarlas, una cinemática te pone las gafas y apareces en el **Lobby** de RehabilitaciónVR (`vr/`), la habitación desde la que se eligen los juegos en las gafas Pico 4 Ultra. Primero ves la pantalla "Elige un juego"; con el botón **Muévete libremente por la lobby** la web se convierte en un videojuego en primera persona (WASD o flechas y ratón, con colisiones), y **R** te devuelve a la pantalla. "Quitarse las gafas" tiene su cinemática de vuelta. El cursor es una mano VR y todo se puede usar con teclado.
 
 Está hecha con HTML, CSS y JavaScript sin compilar: los modelos 3D se construyen con código en Three.js y los textos están separados en archivos JSON.
 

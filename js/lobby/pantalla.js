@@ -1,7 +1,8 @@
 /* =========================================================
    pantalla.js · La pantalla "Elige un juego" del Lobby
    Se pinta en un <canvas> que hace de textura del monitor.
-   Cada tarjeta sale de datos/vr.json (juegos) y se puede tocar.
+   Cada tarjeta sale de datos/vr.json (juegos); los huecos libres salen como
+   "Próximamente" con candado, como en las gafas (6 tarjetas en filas de 3).
    ========================================================= */
 import * as THREE from 'three';
 import { rrect, mesh } from '../nucleo/util.js';
@@ -34,6 +35,13 @@ const ICONOS = {
     g.fillStyle = '#FBF7EA'; g.fillRect(-w*0.13, -h*0.33, w*0.26, h*0.62); estrella(g, 0, 0, w*0.08, '#F7C531');
     g.restore();
   },
+  candado(g, x, y, w, h){
+    const gr = g.createLinearGradient(x, y, x, y+h); gr.addColorStop(0,'#5A6178'); gr.addColorStop(1,'#3A4058'); g.fillStyle = gr; g.fillRect(x,y,w,h);
+    const cx = x + w/2, cy = y + h*0.56, s = h*0.2;
+    g.strokeStyle = '#D5D9E6'; g.lineWidth = s*0.28; g.beginPath(); g.arc(cx, cy - s*0.55, s*0.55, Math.PI, 0); g.lineTo(cx + s*0.55, cy); g.moveTo(cx - s*0.55, cy - s*0.55); g.lineTo(cx - s*0.55, cy); g.stroke();
+    g.fillStyle = '#D5D9E6'; g.fillRect(cx - s*0.95, cy - s*0.1, s*1.9, s*1.5);
+    g.fillStyle = '#3A4058'; g.beginPath(); g.arc(cx, cy + s*0.55, s*0.18, 0, 7); g.fill();
+  },
   bolas(g, x, y, w, h){
     const gr = g.createLinearGradient(x, y, x+w, y+h); gr.addColorStop(0,'#E98A3A'); gr.addColorStop(1,'#B23A5E'); g.fillStyle = gr; g.fillRect(x,y,w,h);
     [[-0.2,0.58,'#3D7BE0'],[0.2,0.58,'#B54BC2'],[0,0.5,'#F2A33A']].forEach(([dx,dy,c]) => {
@@ -44,33 +52,38 @@ const ICONOS = {
   }
 };
 
-export function crearPantalla(juegos){
+export function crearPantalla(juegos, { huecos = juegos.length, bloqueado = { nombre:'Próximamente', lema:'Nuevo juego' } } = {}){
   const lienzo = document.createElement('canvas'); lienzo.width = W; lienzo.height = H;
   const g = lienzo.getContext('2d');
   const tex = new THREE.CanvasTexture(lienzo); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
 
-  // Rectángulos de cada tarjeta, en píxeles del lienzo (sirven para saber cuál se toca)
-  const n = Math.max(1, juegos.length), hueco = 40, margen = 120;
-  const anchoT = Math.min(440, (W - margen*2 - hueco*(n-1)) / n), altoT = 520;
-  const x0 = (W - (anchoT*n + hueco*(n-1))) / 2, y0 = 270;
-  const tarjetas = juegos.map((j, i) => ({ juego:j, x:x0 + i*(anchoT + hueco), y:y0, w:anchoT, h:altoT }));
-
+  // Tarjetas: los juegos y, hasta completar los huecos, "Próximamente" (sin juego: no se pueden tocar)
+  const lista = juegos.slice(0, Math.max(huecos, juegos.length));
+  while(lista.length < huecos) lista.push(null);
+  // Rejilla de 3 columnas, como en las gafas. Posiciones en píxeles del lienzo (sirven para saber cuál se toca)
+  const cols = Math.min(3, lista.length), filas = Math.ceil(lista.length / cols);
+  const hx = 50, hy = 44, y0 = 250, anchoT = 400;
+  const altoT = Math.min(320, (H - y0 - 40 - hy*(filas - 1)) / filas);
+  const x0 = (W - (anchoT*cols + hx*(cols - 1))) / 2;
+  const tarjetas = lista.map((j, i) => ({ juego:j, x:x0 + (i % cols)*(anchoT + hx), y:y0 + Math.floor(i / cols)*(altoT + hy), w:anchoT, h:altoT }));
   function pintar(resaltada = -1){
     g.fillStyle = '#15141F'; g.fillRect(0,0,W,H);
     g.textAlign = 'center'; g.textBaseline = 'alphabetic';
-    g.fillStyle = '#FFFFFF'; g.font = '700 92px Sora, system-ui, sans-serif'; g.fillText('Elige un juego', W/2, 130);
-    g.fillStyle = '#B9C0DA'; g.font = '400 42px Sora, system-ui, sans-serif'; g.fillText('Toca la portada del juego al que quieras jugar', W/2, 200);
+    g.fillStyle = '#FFFFFF'; g.font = '700 84px Sora, system-ui, sans-serif'; g.fillText('Elige un juego', W/2, 118);
+    g.fillStyle = '#B9C0DA'; g.font = '400 40px Sora, system-ui, sans-serif'; g.fillText('Toca la portada del juego al que quieras jugar', W/2, 182);
     tarjetas.forEach((t, i) => {
-      const on = i === resaltada;
+      const j = t.juego || { ...bloqueado, color:'#727C99', icono:'candado' };
+      const on = i === resaltada && t.juego;
       g.save(); g.translate(t.x + t.w/2, t.y + t.h/2); if(on) g.scale(1.04, 1.04); g.translate(-(t.x + t.w/2), -(t.y + t.h/2));
       if(on){ g.shadowColor = 'rgba(95,242,210,.8)'; g.shadowBlur = 40; }
       g.fillStyle = '#262C40'; g.fillRect(t.x, t.y, t.w, t.h);
       g.shadowBlur = 0;
-      g.fillStyle = t.juego.color || '#5FF2D2'; g.fillRect(t.x, t.y, t.w, 14);
-      const dib = ICONOS[t.juego.icono];
-      if(dib) dib(g, t.x + 24, t.y + 38, t.w - 48, t.h*0.5); else { g.fillStyle = '#4A5068'; g.fillRect(t.x + 24, t.y + 38, t.w - 48, t.h*0.5); }
-      g.fillStyle = '#FFFFFF'; g.font = '700 50px Sora, system-ui, sans-serif'; g.fillText(t.juego.nombre, t.x + t.w/2, t.y + t.h*0.5 + 120, t.w - 30);
-      g.fillStyle = '#C9CFE6'; g.font = '400 32px Sora, system-ui, sans-serif'; g.fillText(t.juego.lema, t.x + t.w/2, t.y + t.h*0.5 + 175, t.w - 30);
+      g.fillStyle = j.color || '#5FF2D2'; g.fillRect(t.x, t.y, t.w, 10);
+      const portada = { x:t.x + 18, y:t.y + 26, w:t.w - 36, h:t.h*0.56 };
+      const dib = ICONOS[j.icono];
+      if(dib) dib(g, portada.x, portada.y, portada.w, portada.h); else { g.fillStyle = '#4A5068'; g.fillRect(portada.x, portada.y, portada.w, portada.h); }
+      g.fillStyle = '#FFFFFF'; g.font = '700 40px Sora, system-ui, sans-serif'; g.fillText(j.nombre, t.x + t.w/2, t.y + t.h*0.56 + 82, t.w - 24);
+      g.fillStyle = '#C9CFE6'; g.font = '400 25px Sora, system-ui, sans-serif'; g.fillText(j.lema, t.x + t.w/2, t.y + t.h*0.56 + 122, t.w - 24);
       if(on){ g.strokeStyle = '#5FF2D2'; g.lineWidth = 6; g.strokeRect(t.x - 3, t.y - 3, t.w + 6, t.h + 6); }
       g.restore();
     });
@@ -90,7 +103,7 @@ export function crearPantalla(juegos){
   // ¿Qué tarjeta hay en un punto de la pantalla? (uv de un rayo que la toca)
   function tarjetaEn(uv){
     const px = uv.x * W, py = (1 - uv.y) * H;
-    return tarjetas.findIndex(t => px >= t.x && px <= t.x + t.w && py >= t.y && py <= t.y + t.h);
+    return tarjetas.findIndex(t => t.juego && px >= t.x && px <= t.x + t.w && py >= t.y && py <= t.y + t.h);   // los huecos 'Próximamente' no se tocan
   }
 
   return { grupo, pantalla, tarjetas, pintar, tarjetaEn, ANCHO, ALTO };

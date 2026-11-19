@@ -29,10 +29,10 @@ const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.03, 50)
 const { obstaculos, silla } = crearSala(scene);
 
 /* ---------- Pantalla sobre la mesa ---------- */
-let pantalla, juegos = [];
+let pantalla, juegos = [], opcionesLobby = {};
 const centroPantalla = new THREE.Vector3(), normalPantalla = new THREE.Vector3();
 function montarPantalla(){
-  pantalla = crearPantalla(juegos);
+  pantalla = crearPantalla(juegos, opcionesLobby);
   const p = pantalla.grupo;
   p.position.set(MESA.x, MESA.alto + 0.06 + pantalla.ALTO/2 + 0.05, MESA.z - 0.08);
   p.rotation.x = -0.16;                                                 // inclinada hacia atrás, como en las gafas
@@ -142,8 +142,10 @@ function tocar(){ const m = $('mano'); m.classList.remove('toca'); void m.offset
 
 /* ---------- Ficha del juego (provisional: aún está por decidir cómo se mostrará) ---------- */
 const ficha = $('ficha');
+let focoAntes = null;
 function abrirFicha(j){
   soltarRaton();
+  focoAntes = document.activeElement;
   $('fichaCuerpo').innerHTML = `
     <span class="fam" style="--c:${esc(j.color)}">${esc(j.lema)}</span>
     <h2>${esc(j.nombre)}</h2>
@@ -153,14 +155,57 @@ function abrirFicha(j){
   ficha.classList.add('open');
   $('fichaCerrar').focus({ preventScroll:true });
 }
-function cerrarFicha(){ ficha.classList.remove('open'); }
+function cerrarFicha(){
+  if(!ficha.classList.contains('open')) return;
+  ficha.classList.remove('open');
+  if(focoAntes && document.contains(focoAntes)) focoAntes.focus({ preventScroll:true });   // el foco vuelve a donde estaba
+}
 $('fichaCerrar').addEventListener('click', () => { cerrarFicha(); if(modo === 'libre') pedirRaton(); });
 
 /* ---------- Teclado y botones ---------- */
 addEventListener('keydown', e => {
-  if(e.code === 'KeyR' && !e.ctrlKey && !e.metaKey){ cerrarFicha(); volverPantalla(); }
-  if(e.code === 'Escape') cerrarFicha();
+  if(e.ctrlKey || e.metaKey || e.altKey) return;
+  const enFicha = ficha.classList.contains('open');
+  if(e.code === 'Escape' && enFicha){ cerrarFicha(); return; }
+  if(enFicha) return;                                                    // con la ficha abierta, el teclado es para ella
+  if(e.code === 'KeyR'){ volverPantalla(); return; }
+  if(modo === 'pantalla'){
+    if(e.code === 'KeyL'){ entrarLibre(); return; }
+    // Flechas: moverse entre las tarjetas (rejilla de 3 columnas)
+    const mov = { ArrowLeft:-1, ArrowRight:1, ArrowUp:-3, ArrowDown:3 }[e.code];
+    if(mov !== undefined){
+      e.preventDefault();
+      const disponibles = botonesTarjeta.filter(Boolean);
+      const actual = botonesTarjeta.indexOf(document.activeElement);
+      if(actual < 0){ disponibles[0] && disponibles[0].focus(); return; }   // la primera vez, a la primera tarjeta
+      let i = actual + mov;
+      while(i >= 0 && i < botonesTarjeta.length && !botonesTarjeta[i]) i += Math.sign(mov);
+      (botonesTarjeta[i] || disponibles[0]).focus();
+    }
+  } else if(modo === 'libre' && (e.code === 'Enter' || e.code === 'Space')){
+    e.preventDefault();
+    const i = tarjetaBajo(0, 0);
+    tocar();
+    if(i >= 0) abrirFicha(pantalla.tarjetas[i].juego);
+  }
 });
+
+/* ---------- Tarjetas con teclado: un botón invisible por tarjeta (Tab y Enter) ---------- */
+let botonesTarjeta = [];
+function montarBotonesTarjeta(){
+  const nav = $('tarjetasTeclado');
+  botonesTarjeta = pantalla.tarjetas.map((t, i) => {
+    if(!t.juego) return null;
+    const b = document.createElement('button');
+    b.className = 'solo-lector';
+    b.textContent = `${t.juego.nombre}: ${t.juego.lema}`;
+    b.addEventListener('focus', () => { if(modo === 'pantalla') resaltar(i); });
+    b.addEventListener('blur', () => { if(modo === 'pantalla') resaltar(-1); });
+    b.addEventListener('click', () => { if(modo === 'pantalla') abrirFicha(t.juego); });
+    nav.appendChild(b);
+    return b;
+  });
+}
 $('libre').addEventListener('click', entrarLibre);
 $('volver').addEventListener('click', () => { cerrarFicha(); volverPantalla(); });
 
@@ -170,8 +215,8 @@ function pintarIndicador(){
   const libre = modo === 'libre';
   $('indModo').textContent = libre ? 'Modo libre' : modo === 'viaje' ? '…' : 'Modo pantalla';
   $('indAyuda').innerHTML = libre
-    ? `<li><kbd>W A S D</kbd> o <kbd>←↑↓→</kbd> moverte</li><li><kbd>Ratón</kbd> mirar</li><li><kbd>Clic</kbd> tocar la pantalla</li><li><kbd>R</kbd> volver a la pantalla</li>${capturado() ? '<li><kbd>Esc</kbd> soltar el ratón</li>' : ''}`
-    : `<li><kbd>Clic</kbd> en un juego para verlo</li>`;
+    ? `<li><kbd>W A S D</kbd> o <kbd>↑↓</kbd> moverte</li><li><kbd>Ratón</kbd>, <kbd>←→</kbd> o <kbd>Q E</kbd> mirar</li><li><kbd>Clic</kbd> o <kbd>Enter</kbd> tocar la pantalla</li><li><kbd>R</kbd> volver a la pantalla</li>${capturado() ? '<li><kbd>Esc</kbd> soltar el ratón</li>' : ''}`
+    : `<li><kbd>Clic</kbd> en un juego, o <kbd>Tab</kbd>/<kbd>←↑↓→</kbd> y <kbd>Enter</kbd></li><li><kbd>L</kbd> moverte libremente</li>`;
 }
 function pintarPlano(){
   const { x0, x1, z0, z1 } = LIMITES, w = plano.width, h = plano.height, m = 8;
@@ -203,19 +248,47 @@ const reloj = new THREE.Clock();
 function bucle(){
   const dt = Math.min(reloj.getDelta(), 0.1);
   jugador.actualizar(dt);
-  // En modo libre, la tarjeta que hay en el centro de la vista se resalta
-  if(modo === 'libre') resaltar(capturado() ? tarjetaBajo(0, 0) : -1);
+  // En modo libre, la tarjeta que hay en el centro de la vista (donde apunta la mano) se resalta
+  if(modo === 'libre') resaltar(tarjetaBajo(0, 0));
   pintarPlano();
   motor.dibujar(scene, camera, { fuerza:0.2, umbral:0.9 });
   motor.vigilarRendimiento(dt);
 }
 
+/* ---------- Llegada desde la cinemática: las lentes se abren ---------- */
+function abrirVisor(){
+  const html = document.documentElement;
+  if(!html.classList.contains('cinematica')) return;
+  try{ sessionStorage.removeItem('rvr-cinematica'); }catch{}
+  const visor = $('visor');
+  gsap.fromTo(visor, { '--r':'0vmax' }, { '--r':'80vmax', duration:D(1.6), ease:'power2.out', delay:D(0.3),
+    onComplete:() => { html.classList.remove('cinematica'); gsap.set(visor, { autoAlpha:0 }); } });
+}
+
+/* ---------- Quitarse las gafas: las lentes se cierran y volvemos al salón ---------- */
+function quitarseGafas(e){
+  e && e.preventDefault();
+  if(cuerpo.dataset.saliendo) return;
+  cuerpo.dataset.saliendo = '1';
+  jugador.activar(false); soltarRaton(); cerrarFicha();
+  const destino = new URL('../', location.href).href;
+  const ir = () => { try{ sessionStorage.setItem('rvr-quitar', '1'); }catch{} location.href = destino; };
+  if(reduceMotion){ ir(); return; }
+  setTimeout(ir, 3000);
+  gsap.timeline({ onComplete:ir })
+    .to('.lobby-ui > *', { autoAlpha:0, duration:0.3 }, 0)
+    .fromTo($('visor'), { autoAlpha:1, '--r':'80vmax' }, { '--r':'0vmax', duration:0.9, ease:'power2.in' }, 0.1)
+    .to({}, { duration:0.15 });
+}
+$('salir').addEventListener('click', quitarseGafas);
+
 /* ---------- Arranque ---------- */
 (async () => {
   try{
     const datos = await cargarJSON('../datos/vr.json');
-    juegos = datos.juegos;
+    juegos = datos.juegos; opcionesLobby = datos.lobby || {};
     montarPantalla();
+    montarBotonesTarjeta();
     redimensionar();
     ponerModo('pantalla');
     motor.renderer.setAnimationLoop(bucle);
@@ -223,6 +296,7 @@ function bucle(){
     // Moverse libremente necesita teclado: en pantallas táctiles sin ratón no se ofrece
     if(matchMedia('(hover: none) and (pointer: coarse)').matches) cuerpo.classList.add('tactil');
     gsap.from('.lobby-ui > *', { autoAlpha:0, y:12, duration:D(0.6), stagger:0.08, delay:D(0.2) });
+    abrirVisor();
   }catch(err){
     console.error(err);
     $('loader').innerHTML = 'No se pudo cargar el Lobby. <a href="info.html">Ver la información en texto</a>';

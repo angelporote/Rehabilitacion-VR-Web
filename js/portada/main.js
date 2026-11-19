@@ -20,6 +20,7 @@ const card = document.getElementById('card');
 const cardBody = document.getElementById('cardBody');
 const flash = document.getElementById('flash');
 const flashText = document.getElementById('flashText');
+const visor = document.getElementById('visor');
 
 let escaparate;
 
@@ -30,27 +31,42 @@ function alActivar(obj){
   else abrirFicha(obj);
 }
 
-// Viaje "dentro" del objeto (las gafas): la cámara se mete por las lentes y se abre su página
+// Cinemática "ponerse las gafas": las gafas se levantan de la mesa, se giran para enseñar
+// las lentes y se acercan a la cara; la vista se cierra en dos círculos (las lentes) y se abre el Lobby
 function entrar(obj){
   escaparate.bloquear(true);
   cerrarFicha();
   const destino = new URL(obj.datos.destino, location.href).href;
-  if(reduceMotion){ location.href = destino; return; }
-  const p = obj.modelo.userData.entrada ? obj.modelo.userData.entrada.getWorldPosition(new THREE.Vector3()) : obj.raiz.position.clone();
-  // Primero ponemos las gafas de frente, luego la cámara avanza hasta las lentes
-  obj.rot.x = 0; obj.rot.y = Math.round(obj.rot.y / (Math.PI*2)) * Math.PI*2;
-  flashText.textContent = `Entrando en ${obj.datos.titulo}…`;
-  const mirar = { x:0, y:0, z:0 };
-  const ir = () => { location.href = destino; };
+  const ir = () => { try{ sessionStorage.setItem('rvr-cinematica', '1'); }catch{} location.href = destino; };
+  if(reduceMotion){ ir(); return; }
+
+  obj.fijo = true;
+  const vuelta = Math.round(obj.rot.y / (Math.PI*2)) * Math.PI*2;
+  const dir = new THREE.Vector3(); camera.getWorldDirection(dir);
+  const delante = camera.position.clone().addScaledVector(dir, 6);            // en el aire, frente a nosotros
+  const cara = camera.position.clone().addScaledVector(dir, 0.35);            // pegadas a la cara
+  const mirar = new THREE.Vector3(0, 0, 0);
+  const p = obj.raiz.position;
+  flashText.textContent = 'Encendiendo las gafas…';
+
   const tl = gsap.timeline({ onComplete:ir });
-  setTimeout(ir, 4000);   // por si el equipo va tan lento que la animación se alarga: entramos igualmente
+  setTimeout(ir, 7000);   // por si el equipo va tan lento que la animación se alarga: entramos igualmente
   tl.to(hero, { autoAlpha:0, y:20, duration:0.4 }, 0)
-    .to('#labels', { autoAlpha:0, duration:0.3 }, 0)
-    .to(mirar, { x:p.x, y:p.y, z:p.z, duration:1.2, ease:'power2.inOut', onUpdate:() => camera.lookAt(mirar.x, mirar.y, mirar.z) }, 0.2)
-    .to(camera.position, { x:p.x, y:p.y, z:p.z + 0.25, duration:1.6, ease:'power3.in' }, 0.5)
-    .to(flash, { autoAlpha:1, duration:0.45, ease:'power1.in' }, 1.75)
-    .to(flashText, { autoAlpha:1, duration:0.3 }, 1.95)
-    .to({}, { duration:0.35 });
+    .to(['#labels', '.sombra', '.top'], { autoAlpha:0, duration:0.4 }, 0)
+    // 1. Se levantan de la mesa y vienen delante, de frente
+    .call(() => { obj.rot.x = 0.05; obj.rot.y = vuelta; }, null, 0)
+    .to(p, { x:delante.x, y:delante.y, z:delante.z, duration:1.4, ease:'power2.inOut' }, 0.2)
+    .to(mirar, { x:delante.x, y:delante.y, z:delante.z, duration:1.4, ease:'power2.inOut', onUpdate:() => camera.lookAt(mirar) }, 0.2)
+    // 2. Se dan la vuelta: vemos la almohadilla y las dos lentes
+    .call(() => { (obj.modelo.userData.trasera || []).forEach(m => m.visible = false); obj.rot.y = vuelta + Math.PI; obj.rot.x = -0.05; }, null, 1.5)
+    // 3. Se acercan a la cara
+    .to(p, { x:cara.x, y:cara.y, z:cara.z, duration:1.5, ease:'power3.in' }, 2.5)
+    // 4. Todo se cierra en las dos lentes y se apaga
+    .set(visor, { autoAlpha:1, '--r':'75vmax' }, 3.3)
+    .set(flash, { autoAlpha:1 }, 3.3)
+    .to(visor, { '--r':'0vmax', duration:0.7, ease:'power2.in' }, 3.3)
+    .to(flashText, { autoAlpha:1, duration:0.3 }, 4.0)
+    .to({}, { duration:0.6 });
 }
 
 // Ficha: tarjeta con el resumen del proyecto y un enlace
@@ -72,6 +88,41 @@ function cerrarFicha(){ card.classList.remove('open'); }
 document.getElementById('close').addEventListener('click', cerrarFicha);
 addEventListener('keydown', e => { if(e.key === 'Escape') cerrarFicha(); });
 
+/* ---------- Cinemática al volver del Lobby: nos quitamos las gafas ----------
+   Empezamos con la vista cerrada en las lentes y las gafas pegadas a la cara;
+   las lentes se abren, las gafas se apartan y vuelven a su mesita. */
+function quitarseGafas(){
+  let viene = false;
+  try{ viene = !!sessionStorage.getItem('rvr-quitar'); sessionStorage.removeItem('rvr-quitar'); }catch{}
+  if(!viene) return false;
+  const obj = escaparate.objetos.find(o => o.datos.accion === 'entrar');
+  if(!obj || reduceMotion){ document.documentElement.classList.remove('quitar'); return false; }
+  escaparate.bloquear(true);
+  obj.fijo = true;
+  const casa = obj.raiz.position.clone();
+  const dir = new THREE.Vector3(); camera.getWorldDirection(dir);
+  const cara = camera.position.clone().addScaledVector(dir, 0.35);
+  const vuelta = Math.round(obj.rot.y / (Math.PI*2)) * Math.PI*2;
+  const trasera = obj.modelo.userData.trasera || [];
+  // Estado inicial: gafas en la cara, de espaldas (vemos las lentes) y la vista cerrada
+  obj.raiz.position.copy(cara);
+  obj.rot.x = obj.giro.rotation.x = -0.05; obj.rot.y = obj.giro.rotation.y = vuelta + Math.PI;
+  trasera.forEach(m => m.visible = false);
+  gsap.set(visor, { autoAlpha:1, '--r':'0vmax' });
+  document.documentElement.classList.remove('quitar');
+  gsap.set([hero, '#labels', '.sombra', '.top'], { autoAlpha:0 });
+  gsap.timeline({ onComplete:() => { obj.fijo = false; escaparate.bloquear(false); } })
+    .to(visor, { '--r':'80vmax', duration:1.0, ease:'power2.out' }, 0.2)
+    .set(visor, { autoAlpha:0 }, 1.2)
+    .to(obj.raiz.position, { x:casa.x, y:casa.y + 1, z:casa.z + 2, duration:1.3, ease:'power2.out' }, 0.5)
+    .call(() => { obj.rot.y = vuelta + Math.PI*2; obj.rot.x = obj.base.x; trasera.forEach(m => m.visible = true); }, null, 1.0)
+    .to(obj.raiz.position, { x:casa.x, y:casa.y, z:casa.z, duration:1.0, ease:'power2.inOut' }, 1.8)
+    .to('.sombra', { autoAlpha:1, duration:0.6 }, 1.8)
+    .fromTo(hero, { autoAlpha:0, y:24 }, { autoAlpha:1, y:0, duration:0.9, ease:'power3.out' }, 2.2)
+    .to(['#labels', '.top'], { autoAlpha:1, duration:0.6 }, 2.6);
+  return true;
+}
+
 /* ---------- Tamaño de pantalla ---------- */
 function redimensionar(){
   camera.aspect = innerWidth / innerHeight;
@@ -86,7 +137,8 @@ redimensionar();
 addEventListener('pageshow', e => {
   if(!e.persisted || !escaparate) return;
   camera.position.copy(CAMARA_INICIO); camera.lookAt(0, 0, 0); camera.updateMatrixWorld();
-  gsap.set([hero, '#labels'], { autoAlpha:1, y:0 }); gsap.set([flash, flashText], { autoAlpha:0 });
+  gsap.set([hero, '#labels', '.sombra', '.top'], { autoAlpha:1, y:0 }); gsap.set([flash, flashText, visor], { autoAlpha:0 });
+  escaparate.reiniciar();
   escaparate.bloquear(false);
 });
 
@@ -106,8 +158,10 @@ function bucle(){
     escaparate = await crearEscaparate({ scene, camera, lienzo, datos, alActivar, alColocar:sala.colocarMesitas });
     motor.renderer.setAnimationLoop(bucle);
     document.getElementById('loader').classList.add('done');
-    gsap.from(hero, { autoAlpha:0, y:24, duration:D(0.9), ease:'power3.out' });
-    gsap.from('#labels', { autoAlpha:0, duration:D(0.8), delay:D(0.4) });
+    if(!quitarseGafas()){
+      gsap.from(hero, { autoAlpha:0, y:24, duration:D(0.9), ease:'power3.out' });
+      gsap.from('#labels', { autoAlpha:0, duration:D(0.8), delay:D(0.4) });
+    }
     // Texturas costosas, cuando la página ya se ve
     requestAnimationFrame(() => setTimeout(() => escaparate.detalles(), 60));
   }catch(err){

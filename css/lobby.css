@@ -8,9 +8,9 @@ html,body.lobby{height:100%;overflow:hidden}
 .lobby.capturado #scene{cursor:none}
 
 .lobby-ui > *{position:fixed;z-index:5}
+.lobby-ui > nav{position:static}
 .salir{top:1.2rem;left:var(--gutter)}
 .texto{bottom:1.2rem;left:var(--gutter);font-size:.82rem;color:var(--dim);text-decoration:underline;text-underline-offset:3px}
-kbd{display:inline-block;min-width:1.5em;padding:.05rem .4rem;border:1px solid var(--edge);border-bottom-width:2px;border-radius:6px;font:600 .78rem var(--font);background:rgba(255,255,255,.06);text-align:center}
 
 /* Botón para pasar a primera persona: pequeño, abajo en el centro */
 .libre{left:50%;bottom:1.3rem;transform:translateX(-50%);display:inline-flex;align-items:center;gap:.55rem;border:1px solid rgba(95,242,210,.5);
@@ -38,13 +38,13 @@ kbd{display:inline-block;min-width:1.5em;padding:.05rem .4rem;border:1px solid v
 
 /* Mano VR en el centro (ratón capturado). La punta del índice marca el centro exacto */
 .mano{position:fixed;left:50%;top:50%;width:44px;height:44px;margin:-3px 0 0 -16px;z-index:4;pointer-events:none;display:none;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
-.capturado[data-modo="libre"] .mano{display:block}
+[data-modo="libre"] .mano{display:block}
 .mano.toca{animation:toca .25s ease-out}
 @keyframes toca{40%{transform:translateY(-6px) scale(.9)}100%{transform:none}}
 
 /* Aviso de pausa: en modo libre con el ratón suelto */
 .pausa{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;background:var(--panel);border:1px solid var(--edge);border-radius:99px;padding:.7rem 1.2rem;font-size:.9rem;pointer-events:none;display:none;white-space:nowrap}
-[data-modo="libre"]:not(.capturado) .pausa{display:block}
+[data-modo="libre"]:not(.capturado) .pausa{display:block;top:auto;bottom:1.3rem;transform:translateX(-50%);font-size:.82rem}
 .lobby.tactil .pausa{display:none}
 
 /* Ficha de un juego */
@@ -66,3 +66,6 @@ kbd{display:inline-block;min-width:1.5em;padding:.05rem .4rem;border:1px solid v
   .texto{display:none}
 }
 @media (prefers-reduced-motion:reduce){ .ficha,.ficha.open{transition:none} .mano.toca{animation:none} }
+
+/* Llegada desde la cinemática: el visor empieza cerrado y se abre al cargar */
+.cinematica .visor{opacity:1;visibility:visible}

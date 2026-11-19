@@ -48,6 +48,15 @@ export async function crearEscaparate({ scene, camera, lienzo, datos, alActivar,
     etiqueta.addEventListener('click', () => activar(obj));
     etiqueta.addEventListener('pointerenter', () => marcar(obj, true));
     etiqueta.addEventListener('pointerleave', () => marcar(obj, false));
+    // Con teclado: Tab llega a la etiqueta, las flechas giran el objeto y Enter lo abre
+    etiqueta.addEventListener('focus', () => marcar(obj, true));
+    etiqueta.addEventListener('blur', () => marcar(obj, false));
+    etiqueta.addEventListener('keydown', e => {
+      const g = { ArrowLeft:[0,-0.35], ArrowRight:[0,0.35], ArrowUp:[-0.25,0], ArrowDown:[0.25,0] }[e.key];
+      if(!g) return;
+      e.preventDefault();
+      obj.rot.x = THREE.MathUtils.clamp(obj.rot.x + g[0], -1.1, 1.1); obj.rot.y += g[1];
+    });
     objetos.push(obj);
   }
 
@@ -136,6 +145,7 @@ export async function crearEscaparate({ scene, camera, lienzo, datos, alActivar,
   const tmp = new THREE.Vector3();
   function animar(t, dt){
     objetos.forEach(o => {
+      if(o.fijo){ o.giro.rotation.x += (o.rot.x - o.giro.rotation.x) * Math.min(1, dt*4); o.giro.rotation.y += (o.rot.y - o.giro.rotation.y) * Math.min(1, dt*4); o.giro.position.y *= 0.9; return; }   // lo mueve una cinemática
       const libre = !o.hover && !(arrastre && arrastre.obj === o) && !reduceMotion;
       if(libre) o.rot.y += dt * 0.25;                                       // giro automático lento
       if(libre) o.rot.x += (o.base.x - o.rot.x) * Math.min(1, dt * 1.5);    // vuelve a su inclinación
@@ -153,6 +163,11 @@ export async function crearEscaparate({ scene, camera, lienzo, datos, alActivar,
   return {
     objetos, colocar, animar,
     bloquear(v){ bloqueado = v; if(v) objetos.forEach(o => marcar(o, false)); },
+    // Deja cada objeto como al principio (al volver atrás desde otra página)
+    reiniciar(){
+      objetos.forEach(o => { o.fijo = false; o.rot.x = o.base.x; (o.modelo.userData.trasera || []).forEach(m => m.visible = true); });
+      colocar();
+    },
     detalles(){ objetos.forEach(o => o.detalle && o.detalle()); }
   };
 }
