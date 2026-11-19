@@ -5,7 +5,7 @@
    "Próximamente" con candado, como en las gafas (6 tarjetas en filas de 3).
    ========================================================= */
 import * as THREE from 'three';
-import { rrect, mesh } from '../nucleo/util.js';
+import { rrect, mesh } from '../nucleo/util.js?v=202611192241';
 
 const W = 1600, H = 900;                       // resolución del lienzo (16:9)
 

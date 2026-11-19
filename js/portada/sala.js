@@ -5,7 +5,7 @@
    Medidas en "metros de escena": suelo en y = SUELO, pared del fondo en z = FONDO.
    ========================================================= */
 import * as THREE from 'three';
-import { gamaBaja, rrect, mesh, canvasTex, basicGlow } from '../nucleo/util.js';
+import { gamaBaja, rrect, mesh, canvasTex, basicGlow } from '../nucleo/util.js?v=202611192241';
 
 export const SUELO = -3.4, FONDO = -9;
 

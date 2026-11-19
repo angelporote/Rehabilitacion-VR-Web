@@ -10,13 +10,13 @@
    - "panel": un objeto se ha acercado y su panel está abierto
    ========================================================= */
 import * as THREE from 'three';
-import { crearMotor } from '../nucleo/motor.js';
-import { gsap, D, reduceMotion } from '../nucleo/util.js';
-import { cargarJSON, esc } from '../nucleo/datos.js';
-import { crearJugador } from '../nucleo/jugador.js';
-import { crearPlano } from '../nucleo/plano.js';
-import { SALAS } from '../juegos/index.js';
-import { crearPanel } from './panel.js';
+import { crearMotor } from '../nucleo/motor.js?v=202611192241';
+import { gsap, D, reduceMotion } from '../nucleo/util.js?v=202611192241';
+import { cargarJSON, esc } from '../nucleo/datos.js?v=202611192241';
+import { crearJugador } from '../nucleo/jugador.js?v=202611192241';
+import { crearPlano } from '../nucleo/plano.js?v=202611192241';
+import { SALAS } from '../juegos/index.js?v=202611192241';
+import { crearPanel } from './panel.js?v=202611192241';
 
 const $ = id => document.getElementById(id);
 const lienzo = $('scene'), cuerpo = document.body, html = document.documentElement;

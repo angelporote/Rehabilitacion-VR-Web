@@ -6,9 +6,9 @@
    - "desplegar": como un papel que se abre (primero a lo ancho, luego a lo alto)
    - "acercar":   un círculo que se abre desde el centro (sale de la bola)
    ========================================================= */
-import { gsap, reduceMotion } from '../nucleo/util.js';
-import { esc } from '../nucleo/datos.js';
-import { VISTAS, animarVista } from './vistas.js';
+import { gsap, reduceMotion } from '../nucleo/util.js?v=202611192241';
+import { esc } from '../nucleo/datos.js?v=202611192241';
+import { VISTAS, animarVista } from './vistas.js?v=202611192241';
 
 export function crearPanel(juego){
   const $ = id => document.getElementById(id);

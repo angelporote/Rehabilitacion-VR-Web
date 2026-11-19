@@ -12,7 +12,7 @@
    la cinemática y la animación de cada fotograma.
    ========================================================= */
 import * as THREE from 'three';
-import { mesh, canvasTex, rrect, basicGlow, gamaBaja } from '../../nucleo/util.js';
+import { mesh, canvasTex, rrect, basicGlow, gamaBaja } from '../../nucleo/util.js?v=202611192241';
 
 const U = (x, y, z) => new THREE.Vector3(x, y, -z);      // de Unity a la web
 

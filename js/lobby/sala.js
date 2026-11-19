@@ -6,7 +6,7 @@
    Medidas en metros, como en Unity: suelo en y = 0.
    ========================================================= */
 import * as THREE from 'three';
-import { gamaBaja, mesh, canvasTex, basicGlow } from '../nucleo/util.js';
+import { gamaBaja, mesh, canvasTex, basicGlow } from '../nucleo/util.js?v=202611192241';
 
 export const LIMITES = { x0:-3, x1:3, z0:-3, z1:4, alto:2.9 };   // interior de las paredes
 export const MESA = { x:0, z:-1.75, ancho:1.7, fondo:0.8, alto:0.76 };

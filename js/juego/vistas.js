@@ -4,7 +4,7 @@
    nunca de pacientes) y devuelve HTML. Se animan con la clase .activa.
    Para añadir una vista: una función más en VISTAS con su nombre.
    ========================================================= */
-import { esc } from '../nucleo/datos.js';
+import { esc } from '../nucleo/datos.js?v=202611192241';
 
 const num = v => typeof v === 'number' ? v.toLocaleString('es-ES') : esc(v);
 const etiquetaEjemplo = '<span class="ejemplo">Datos de ejemplo</span>';

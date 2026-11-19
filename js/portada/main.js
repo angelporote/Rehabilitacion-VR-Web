@@ -4,11 +4,11 @@
    y qué pasa al activar un objeto: entrar en él o abrir su ficha.
    ========================================================= */
 import * as THREE from 'three';
-import { crearMotor } from '../nucleo/motor.js';
-import { gsap, reduceMotion, D } from '../nucleo/util.js';
-import { cargarJSON, esc } from '../nucleo/datos.js';
-import { crearEscena } from './escena.js';
-import { crearEscaparate } from './escaparate.js';
+import { crearMotor } from '../nucleo/motor.js?v=202611192241';
+import { gsap, reduceMotion, D } from '../nucleo/util.js?v=202611192241';
+import { cargarJSON, esc } from '../nucleo/datos.js?v=202611192241';
+import { crearEscena } from './escena.js?v=202611192241';
+import { crearEscaparate } from './escaparate.js?v=202611192241';
 
 const lienzo = document.getElementById('scene');
 const motor = crearMotor(lienzo);

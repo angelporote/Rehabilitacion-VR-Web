@@ -4,6 +4,16 @@ Diario del trabajo en la web: qué se hizo, qué se decidió (y por qué) y qué
 
 ---
 
+## 19/11/2026 · Que el navegador coja siempre la versión nueva
+
+**Hecho**
+- `herramientas/version.py` añade `?v=<fecha>` a los CSS y a todos los `import` propios. Se ejecuta antes de cada commit. Los JSON de `datos/` se piden siempre revalidando.
+
+**Por qué**
+- Ángel no veía los cambios (el Esc del Lobby, entrar al Bingo) porque el navegador mezclaba la página nueva con scripts viejos guardados.
+
+---
+
 ## 19/11/2026 · La sala del Bingo
 
 **Hecho**

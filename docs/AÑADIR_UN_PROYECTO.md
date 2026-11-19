@@ -76,6 +76,8 @@ Los datos de las vistas son siempre de ejemplo: nunca de pacientes reales.
 
 ## Antes de subir cambios
 
+- Ejecuta `python3 herramientas/version.py`. Pone `?v=<fecha>` a los CSS y a los `import` propios, para que el navegador no se quede con la versión vieja (GitHub Pages deja guardar los archivos unos 10 minutos). La página HTML puede tardar esos 10 minutos en renovarse sola; con Ctrl+F5 es al momento.
+
 - Sirve la web en local (`python3 -m http.server`) y prueba la portada, el Lobby (los dos modos) y la versión en texto, también con la ventana estrecha (móvil).
 - Comprueba que la consola del navegador no muestra errores.
 - Apunta lo que hiciste en `docs/BITACORA.md`.
