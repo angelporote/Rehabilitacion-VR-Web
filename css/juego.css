@@ -1,0 +1,126 @@
+/* =========================================================
+   juego.css · La sala de un juego (vr/juego.html)
+   Usa también lobby.css (botones, indicador, mano, modo libre).
+   body[data-modo] = "cine" | "mesa" | "libre" | "viaje" | "panel"
+   ========================================================= */
+
+/* Lo de la mesa ("Volver a la mesa" sale en modo libre, como "R" en el Lobby) */
+[data-modo="mesa"] .libre{display:inline-flex}
+[data-modo="cine"] .lobby-ui,[data-modo="panel"] .lobby-ui > :not(.indicador){display:none}
+[data-modo="panel"] .indicador{opacity:0;pointer-events:none}
+.juego .indicador canvas{height:150px}
+
+/* ---------- Cinemática ---------- */
+.cine{display:none}
+[data-modo="cine"] .cine{display:block}
+.banda{position:fixed;left:0;right:0;height:9vh;background:#000;z-index:6}
+.banda.arriba{top:0}
+.banda.abajo{bottom:0}
+.cine-titulo{position:fixed;left:50%;bottom:calc(9vh + 1.2rem);transform:translateX(-50%);z-index:7;margin:0;font-size:.92rem;color:var(--text);
+  background:var(--panel);border:1px solid var(--edge);border-radius:99px;padding:.45rem 1rem;white-space:nowrap}
+.cine-atras,.cine-saltar{position:fixed;z-index:7;top:calc(9vh + 1rem)}
+.cine-atras{left:var(--gutter)}
+.cine-saltar{right:var(--gutter)}
+
+/* ---------- Etiquetas sobre los objetos ---------- */
+.etiquetas{position:fixed;inset:0;pointer-events:none;z-index:4}
+.etiqueta{position:absolute;left:0;top:0;transform:translate(-50%,-100%);pointer-events:auto;display:none;text-align:left;
+  background:var(--panel);border:1px solid var(--edge);border-radius:14px;padding:.5rem .8rem;color:var(--text);white-space:nowrap;
+  transition:border-color .2s, box-shadow .2s;cursor:var(--cursor-dedo)}
+.etiqueta b{display:block;font-size:.88rem}
+.etiqueta span{display:block;font-size:.76rem;color:var(--dim)}
+.etiqueta::after{content:"";position:absolute;left:50%;bottom:-7px;width:12px;height:12px;margin-left:-6px;background:inherit;border:inherit;border-top:0;border-left:0;transform:rotate(45deg)}
+.etiqueta.on,.etiqueta:focus-visible{border-color:var(--bio);box-shadow:0 0 0 1px var(--bio),0 10px 30px -10px rgba(95,242,210,.7);outline:none}
+[data-modo="mesa"] .etiqueta{display:block}
+
+/* ---------- Panel grande (90 % de la pantalla) ---------- */
+.panel{position:fixed;left:5vw;top:5vh;width:90vw;height:90vh;z-index:20;display:flex;flex-direction:column;
+  background:rgba(251,246,234,.97);color:#2A2119;border-radius:22px;box-shadow:0 30px 90px -20px rgba(0,0,0,.6);overflow:hidden;
+  --c:#E8A93A}
+.panel[hidden]{display:none}
+.panel-cabeza{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.4rem 1rem 1.8rem;border-bottom:1px solid rgba(42,33,25,.12);background:var(--c)}
+.panel-cabeza h2{margin:0;font-size:clamp(1.1rem,2.2vw,1.5rem);letter-spacing:-.02em;color:#1D140D;flex:1}
+.panel .fam{font-size:.78rem;font-weight:600;color:#1D140D;background:rgba(255,255,255,.55);border-radius:99px;padding:.25rem .75rem;white-space:nowrap}
+.panel .cerrar{display:inline-flex;align-items:center;gap:.5rem;border:1px solid rgba(29,20,13,.3);background:rgba(255,255,255,.5);color:#1D140D;border-radius:99px;padding:.4rem .8rem}
+.panel .cerrar kbd{background:rgba(29,20,13,.1);border-color:rgba(29,20,13,.25);color:#1D140D}
+.panel-cuerpo{flex:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);min-height:0}
+.panel-texto{overflow-y:auto;padding:1.6rem 2rem 45vh;scroll-behavior:smooth;outline:none}
+.panel-texto:focus-visible{box-shadow:inset 0 0 0 2px var(--c)}
+.panel-texto .intro{font-size:1.02rem;line-height:1.65;color:#5A4A3A;margin:0 0 1.2rem}
+.panel-texto .baja{font-size:.8rem;color:#8A7562;margin:0 0 2rem;display:flex;align-items:center;gap:.4rem}
+.panel-texto article{padding:1.1rem 0 1.4rem 1.2rem;border-left:3px solid rgba(42,33,25,.12);margin-bottom:1rem;transition:border-color .3s, opacity .3s;opacity:.55}
+.panel-texto article.activa{border-color:var(--c);opacity:1}
+.panel-texto h3{margin:0 0 .5rem;font-size:1.12rem;letter-spacing:-.01em}
+.panel-texto p{margin:0;line-height:1.65;font-size:.97rem}
+.panel-texto ul{margin:.3rem 0 0;padding-left:1.1rem;line-height:1.6;font-size:.95rem}
+.panel-texto li{margin-bottom:.35rem}
+.panel-texto table{border-collapse:collapse;margin-top:.8rem;font-size:.85rem;width:100%}
+.panel-texto th,.panel-texto td{border-bottom:1px solid rgba(42,33,25,.14);padding:.35rem .4rem;text-align:left}
+.panel-texto th{font-weight:600;color:#6A5644}
+.panel-visual{margin:0;position:relative;background:#211812;overflow:hidden}
+.panel-visual .capa{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:clamp(1rem,3vw,2.4rem);opacity:0;visibility:hidden;transition:opacity .45s, visibility 0s linear .45s, transform .45s;transform:translateY(14px)}
+.panel-visual .capa.activa{opacity:1;visibility:visible;transform:none;transition:opacity .45s, transform .45s}
+.panel-visual img{width:100%;max-height:calc(100% - 3rem);object-fit:contain;border-radius:12px;box-shadow:0 20px 50px -20px rgba(0,0,0,.8)}
+.panel-visual figcaption{color:var(--dim);font-size:.85rem;margin-top:.8rem;text-align:center}
+.panel-progreso{height:4px;background:rgba(42,33,25,.1)}
+.panel-progreso i{display:block;height:100%;width:0;background:var(--c);transition:width .2s}
+
+/* ---------- Vistas de datos (de ejemplo) ---------- */
+.ejemplo{position:absolute;top:1rem;right:1rem;font-size:.72rem;font-weight:600;color:#1D140D;background:var(--warm);border-radius:99px;padding:.2rem .6rem}
+.vista{color:var(--text);font-size:.85rem;width:100%;max-width:620px;margin:0 auto}
+.vista h4{margin:0 0 .9rem;font-size:.8rem;font-weight:600;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+.vista pre{margin:0;background:#140E0A;border:1px solid var(--edge);border-radius:14px;padding:1rem 1.2rem;font-size:clamp(.66rem,1.1vw,.8rem);line-height:1.6;overflow:hidden;white-space:pre-wrap}
+.vista pre span{display:block;opacity:0;transform:translateX(-6px);transition:opacity .3s, transform .3s}
+.activa .vista pre span{opacity:1;transform:none}
+.j-k{color:#9CD8FF}.j-s{color:#F2C77E}.j-n{color:var(--bio)}.j-c{color:#8A7562}
+.fichas{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.7rem}
+.ficha-m{background:#140E0A;border:1px solid var(--edge);border-radius:14px;padding:.8rem .9rem}
+.ficha-m b{display:block;font-size:1.6rem;font-weight:700;color:var(--bio);letter-spacing:-.02em}
+.ficha-m b small{font-size:.8rem;color:var(--dim);font-weight:400;margin-left:.2rem}
+.ficha-m code{font-size:.72rem;color:#F2C77E}
+.ficha-m span{display:block;font-size:.76rem;color:var(--dim);margin-top:.25rem;line-height:1.4}
+.ficha-m.der b{color:var(--warm)}
+.tabla-m{width:100%;border-collapse:collapse;font-size:.8rem}
+.tabla-m td{padding:.45rem .5rem;border-bottom:1px solid var(--edge);vertical-align:top}
+.tabla-m td:first-child{font-family:ui-monospace,monospace;color:#F2C77E;white-space:nowrap}
+.tabla-m td:nth-child(2){color:var(--bio);font-weight:700;text-align:right;white-space:nowrap}
+.tabla-m td:last-child{color:var(--dim)}
+.barras{display:grid;gap:.55rem}
+.barra{display:grid;grid-template-columns:5.5rem 1fr;align-items:center;gap:.6rem;font-size:.78rem}
+.barra > span{color:var(--dim)}
+.barra .pista{position:relative;height:24px;display:flex;border-radius:6px;overflow:hidden;background:rgba(255,246,236,.06)}
+.barra i{display:block;height:100%;width:0;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.barra .lat{background:var(--bio)}
+.barra .tra{background:var(--warm)}
+.barra .omitida{align-self:center;padding-left:.6rem;color:#F29A6B;font-size:.76rem}
+.leyenda{display:flex;gap:1rem;margin-top:.9rem;font-size:.75rem;color:var(--dim)}
+.leyenda i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:.35rem;vertical-align:-1px}
+.grafica{margin-top:1rem;background:#140E0A;border:1px solid var(--edge);border-radius:14px;padding:.8rem}
+.grafica svg{display:block;width:100%;height:auto}
+.grafica path.linea{stroke-dasharray:600;stroke-dashoffset:600;transition:stroke-dashoffset 1.4s ease .2s}
+.activa .grafica path.linea{stroke-dashoffset:0}
+.flujo{display:grid;gap:.6rem}
+.paso-f{display:flex;gap:.9rem;align-items:center;background:#140E0A;border:1px solid var(--edge);border-radius:14px;padding:.8rem 1rem;opacity:0;transform:translateY(8px);transition:opacity .4s, transform .4s}
+.activa .paso-f{opacity:1;transform:none}
+.paso-f svg{width:34px;height:34px;flex:none;color:var(--bio)}
+.paso-f b{display:block;font-size:.9rem}
+.paso-f span{display:block;font-size:.76rem;color:var(--dim)}
+.flecha-f{text-align:center;color:var(--warm);font-size:1rem;line-height:1}
+.privado{text-align:center}
+.privado .codigo{display:inline-block;font-family:ui-monospace,monospace;font-size:clamp(2.2rem,6vw,4rem);font-weight:700;color:var(--bio);background:#140E0A;border:1px solid var(--edge);border-radius:18px;padding:.6rem 1.6rem;margin-bottom:1.2rem}
+.privado ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center}
+.privado li{font-size:.8rem;color:var(--dim);border:1px solid var(--edge);border-radius:99px;padding:.3rem .8rem;text-decoration:line-through;text-decoration-color:#F29A6B}
+
+@media (max-width:760px){
+  .panel{left:0;top:0;width:100vw;height:100dvh;border-radius:0}
+  .panel-cuerpo{grid-template-columns:1fr;grid-template-rows:38vh minmax(0,1fr)}
+  .panel-visual{order:-1}
+  .panel-texto{padding:1.2rem 1.2rem 30vh}
+  .cine-titulo{font-size:.8rem}
+  .juego .indicador{display:none}
+  .panel .fam{display:none}
+  .panel-cabeza{padding:.8rem 1rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .panel-visual .capa,.vista pre span,.barra i,.paso-f,.grafica path.linea{transition:none}
+}

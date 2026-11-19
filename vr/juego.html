@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es" class="fundido">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RehabilitaciónVR · Sala de juego</title>
+<meta name="description" content="La sala de un juego de RehabilitaciónVR en 3D: cómo se juega y qué datos se guardan.">
+<!--
+  SALA DE UN JUEGO (vr/juego.html?id=<juego>)
+  - js/juego/main.js     → cinemática, modos "mesa" y "libre", tocar objetos, paneles
+  - js/juego/panel.js    → el panel grande: texto que baja a la izquierda y capturas a la derecha
+  - js/juego/vistas.js   → los dibujos de la derecha que no son capturas (datos de ejemplo)
+  - js/juegos/<id>/      → la sala de cada juego (escena.js), registrada en js/juegos/index.js
+  - datos/juegos/<id>.json → los textos de los paneles
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/lobby.css">
+<link rel="stylesheet" href="../css/juego.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+<script type="module" src="../js/juego/main.js"></script>
+</head>
+<body class="lobby juego" data-modo="cine">
+
+<canvas id="scene" aria-label="La sala del juego en 3D"></canvas>
+<div class="loader" id="loader">Entrando en la sala…</div>
+<div class="fundido-negro" aria-hidden="true"></div>
+
+<!-- Cinemática: bandas de cine y botones para saltarla o volver atrás -->
+<div class="cine" aria-live="polite">
+  <div class="banda arriba"></div>
+  <div class="banda abajo"></div>
+  <p class="cine-titulo" id="cineTitulo"></p>
+  <button class="ghost cine-atras" id="cineAtras">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4L3 8l4 4"/></svg>
+    Volver al Lobby <kbd>Esc</kbd>
+  </button>
+  <button class="ghost cine-saltar" id="cineSaltar">Saltar <kbd>Enter</kbd></button>
+</div>
+
+<div class="lobby-ui">
+  <a class="ghost salir" id="salir" href="./">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4L3 8l4 4"/></svg>
+    Volver al Lobby <kbd>Esc</kbd>
+  </a>
+
+  <button class="libre" id="libre">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2.2"/><path d="M12 8v6l-3 6M12 14l3 6M8 11h8"/></svg>
+    Muévete libremente por la sala <kbd>L</kbd>
+  </button>
+  <p class="solo-raton">Para moverte libremente necesitas teclado y ratón.</p>
+
+  <button class="ghost volver" id="volver"><kbd>R</kbd> Volver a la mesa</button>
+
+  <aside class="indicador" aria-live="polite">
+    <b id="indModo">Cinemática</b>
+    <ul id="indAyuda"></ul>
+    <canvas id="plano" width="150" height="150" aria-hidden="true"></canvas>
+  </aside>
+</div>
+
+<!-- Etiquetas sobre los objetos que se tocan (también son los botones para el teclado) -->
+<div class="etiquetas" id="etiquetas"></div>
+
+<img class="mano" id="mano" src="../img/cursor/dedo.svg" alt="" aria-hidden="true">
+<div class="pausa">Haz clic para mirar con el ratón · <kbd>←→</kbd> girar · <kbd>R</kbd> volver a la mesa</div>
+
+<!-- Panel grande: lo que se despliega al tocar un objeto -->
+<section class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="panelTitulo" hidden>
+  <header class="panel-cabeza">
+    <span class="fam" id="panelFam"></span>
+    <h2 id="panelTitulo"></h2>
+    <button class="cerrar" id="panelCerrar" aria-label="Cerrar">
+      <kbd>Esc</kbd>
+      <svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.8"><path d="M1 1l10 10M11 1L1 11"/></svg>
+    </button>
+  </header>
+  <div class="panel-cuerpo">
+    <div class="panel-texto" id="panelTexto" tabindex="0" aria-label="Texto: baja con las flechas o la rueda"></div>
+    <figure class="panel-visual" id="panelVisual" aria-hidden="true"></figure>
+  </div>
+  <div class="panel-progreso"><i id="panelBarra"></i></div>
+</section>
+
+</body>
+</html>

@@ -4,6 +4,27 @@ Diario del trabajo en la web: qué se hizo, qué se decidió (y por qué) y qué
 
 ---
 
+## 19/11/2026 · La sala del Bingo
+
+**Hecho**
+- Al tocar la tarjeta del **Bingo** en el Lobby se entra (fundido a negro) en su sala 3D: `vr/juego.html?id=bingo`. Copia de la escena de Unity con sus medidas: mesa, máquina con bombo, rampa, bandeja, descarte, cesta, cartón (3, 8, 18, 19) y monitor.
+- **Cinemática**: sentado a la mesa con la mirada fija, el bombo acelera y suelta la bola 18; la cámara la sigue por la rampa hasta la bandeja y se abre a la mesa. Se puede saltar (`Enter`) o volver al Lobby (`Esc`).
+- Después, **sentado a la mesa** con dos objetos que se tocan, o **moviéndose libremente** (`L`, como en el Lobby; `R` vuelve a la mesa).
+- **Cartón → "Cómo se juega"**: se pone delante y se despliega en un panel del 90 %. Diez pasos a la izquierda y, a la derecha, la captura de Unity de cada paso (13 capturas en `img/vr/bingo/`).
+- **Bola → "Cómo se guardan los datos"**: se acerca y se abre en círculo. Archivo de la partida, medidas comunes y propias, registro por número, cómo se evalúa, de las gafas al PC y privacidad, con **datos de ejemplo** (nunca de pacientes).
+- Todo con teclado (tabla en `docs/ESTRUCTURA.md`).
+- Orden para crecer: la sala es genérica (`js/juego/`) y cada juego pone la suya en `js/juegos/<id>/` y sus textos en `datos/juegos/<id>.json`. Pasos en `docs/AÑADIR_UN_PROYECTO.md`. `jugador.js` y el plano pasan a `js/nucleo/` para compartirlos con el Lobby.
+
+**Decidido**
+- Textos sacados de la README del Bingo y de `GUIA_MEDICION.md` del hilo de datos; **pendientes de que Ángel los revise**. Las medidas son las que define el hilo de datos.
+- "Volver atrás" en la cinemática = volver al Lobby.
+
+**Pendiente**
+- Revisión de textos por Ángel.
+- Las salas de Cocina y Memoria (con el mismo esquema).
+
+---
+
 ## 19/11/2026 · Teclado de principio a fin
 
 **Hecho**

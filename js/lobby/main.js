@@ -12,7 +12,8 @@ import { gsap, D, reduceMotion } from '../nucleo/util.js';
 import { cargarJSON, esc } from '../nucleo/datos.js';
 import { crearSala, LIMITES, MESA } from './sala.js';
 import { crearPantalla } from './pantalla.js';
-import { crearJugador } from './jugador.js';
+import { crearJugador } from '../nucleo/jugador.js';
+import { crearPlano } from '../nucleo/plano.js';
 
 const $ = id => document.getElementById(id);
 const lienzo = $('scene');
@@ -144,6 +145,7 @@ function tocar(){ const m = $('mano'); m.classList.remove('toca'); void m.offset
 const ficha = $('ficha');
 let focoAntes = null;
 function abrirFicha(j){
+  if(j.sala){ irASala(j); return; }
   soltarRaton();
   focoAntes = document.activeElement;
   $('fichaCuerpo').innerHTML = `
@@ -161,6 +163,17 @@ function cerrarFicha(){
   if(focoAntes && document.contains(focoAntes)) focoAntes.focus({ preventScroll:true });   // el foco vuelve a donde estaba
 }
 $('fichaCerrar').addEventListener('click', () => { cerrarFicha(); if(modo === 'libre') pedirRaton(); });
+
+/* ---------- Juegos con sala 3D propia: fundido a negro y a su sala ---------- */
+function irASala(j){
+  if(cuerpo.dataset.saliendo) return;
+  cuerpo.dataset.saliendo = '1';
+  jugador.activar(false); soltarRaton();
+  const ir = () => { location.href = `juego.html?id=${encodeURIComponent(j.id)}`; };
+  if(reduceMotion){ ir(); return; }
+  setTimeout(ir, 1500);
+  gsap.to('.fundido-negro', { autoAlpha:1, duration:0.5, onComplete:ir });
+}
 
 /* ---------- Teclado y botones ---------- */
 addEventListener('keydown', e => {
@@ -212,7 +225,6 @@ $('libre').addEventListener('click', entrarLibre);
 $('volver').addEventListener('click', () => { cerrarFicha(); volverPantalla(); });
 
 /* ---------- Indicador de la esquina: modo, controles y plano ---------- */
-const plano = $('plano'), pg = plano.getContext('2d');
 function pintarIndicador(){
   const libre = modo === 'libre';
   $('indModo').textContent = libre ? 'Modo libre' : modo === 'viaje' ? '…' : 'Modo pantalla';
@@ -220,23 +232,10 @@ function pintarIndicador(){
     ? `<li><kbd>W A S D</kbd> o <kbd>↑↓</kbd> moverte</li><li><kbd>Ratón</kbd>, <kbd>←→</kbd> o <kbd>Q E</kbd> mirar</li><li><kbd>Clic</kbd> o <kbd>Enter</kbd> tocar la pantalla</li><li><kbd>R</kbd> volver a la pantalla</li><li><kbd>Esc</kbd> ${capturado() ? 'soltar el ratón' : 'quitarse las gafas'}</li>`
     : `<li><kbd>Clic</kbd> en un juego, o <kbd>←↑↓→</kbd> y <kbd>Enter</kbd></li><li><kbd>L</kbd> moverte libremente</li><li><kbd>Esc</kbd> quitarse las gafas</li>`;
 }
-function pintarPlano(){
-  const { x0, x1, z0, z1 } = LIMITES, w = plano.width, h = plano.height, m = 8;
-  const esc2 = Math.min((w - m*2)/(x1 - x0), (h - m*2)/(z1 - z0));
-  const X = x => m + (x - x0)*esc2 + ((w - m*2) - (x1 - x0)*esc2)/2, Z = z => m + (z - z0)*esc2;
-  pg.clearRect(0, 0, w, h);
-  pg.fillStyle = 'rgba(255,246,236,.08)'; pg.strokeStyle = 'rgba(255,246,236,.5)'; pg.lineWidth = 2;
-  pg.fillRect(X(x0), Z(z0), (x1 - x0)*esc2, (z1 - z0)*esc2); pg.strokeRect(X(x0), Z(z0), (x1 - x0)*esc2, (z1 - z0)*esc2);
-  pg.fillStyle = 'rgba(210,192,172,.55)';
-  obstaculos.forEach(o => pg.fillRect(X(o.x0), Z(o.z0), (o.x1 - o.x0)*esc2, (o.z1 - o.z0)*esc2));
-  pg.fillStyle = '#5FF2D2'; pg.fillRect(X(-pantalla.ANCHO/2), Z(MESA.z - 0.12), pantalla.ANCHO*esc2, 3);   // la pantalla
-  // Dónde estás y hacia dónde miras
-  const px = X(camera.position.x), pz = Z(camera.position.z);
-  const dir = new THREE.Vector3(); camera.getWorldDirection(dir);
-  const a = Math.atan2(dir.z, dir.x);
-  pg.fillStyle = 'rgba(95,242,210,.25)'; pg.beginPath(); pg.moveTo(px, pz); pg.arc(px, pz, 22, a - 0.5, a + 0.5); pg.fill();
-  pg.fillStyle = '#FFF6EC'; pg.beginPath(); pg.arc(px, pz, 4.5, 0, 7); pg.fill();
-}
+// Plano: la habitación desde arriba, con la pantalla en verde
+const pintarPlano = crearPlano($('plano'), LIMITES, obstaculos, (g, X, Z, k) => {
+  g.fillStyle = '#5FF2D2'; g.fillRect(X(-pantalla.ANCHO/2), Z(MESA.z - 0.12), pantalla.ANCHO*k, 3);
+});
 
 /* ---------- Tamaño de pantalla y bucle ---------- */
 function redimensionar(){
@@ -252,7 +251,7 @@ function bucle(){
   jugador.actualizar(dt);
   // En modo libre, la tarjeta que hay en el centro de la vista (donde apunta la mano) se resalta
   if(modo === 'libre') resaltar(tarjetaBajo(0, 0));
-  pintarPlano();
+  pintarPlano(camera);
   motor.dibujar(scene, camera, { fuerza:0.2, umbral:0.9 });
   motor.vigilarRendimiento(dt);
 }
@@ -288,7 +287,10 @@ $('salir').addEventListener('click', quitarseGafas);
 // Seleccionada de inicio la primera tarjeta (Enter ya la abre), cuando la interfaz ya se ve
 function seleccionarInicio(){
   if(document.activeElement !== document.body || modo !== 'pantalla') return;
-  const primera = botonesTarjeta.find(Boolean); primera && primera.focus({ preventScroll:true });
+  // Si volvemos de la sala de un juego, queda seleccionada su tarjeta
+  let desde = ''; try{ desde = sessionStorage.getItem('rvr-desde-juego') || ''; sessionStorage.removeItem('rvr-desde-juego'); }catch{}
+  const i = pantalla.tarjetas.findIndex(t => t.juego && t.juego.id === desde);
+  const boton = botonesTarjeta[i] || botonesTarjeta.find(Boolean); boton && boton.focus({ preventScroll:true });
 }
 
 (async () => {

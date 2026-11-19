@@ -17,8 +17,11 @@ js/portada/main.js ──> js/portada/escena.js ──> js/portada/sala.js ─�
                    ──> js/portada/escaparate.js ──> js/modelos/index.js ──> js/modelos/*.js ──> js/nucleo/util.js
                    ──> js/nucleo/motor.js
                    ──> js/nucleo/datos.js
-js/lobby/main.js ──> js/lobby/sala.js, js/lobby/pantalla.js, js/lobby/jugador.js ──> js/nucleo/util.js
-                 ──> js/nucleo/motor.js, js/nucleo/datos.js
+js/lobby/main.js ──> js/lobby/sala.js, js/lobby/pantalla.js ──> js/nucleo/util.js
+                 ──> js/nucleo/jugador.js, js/nucleo/plano.js, js/nucleo/motor.js, js/nucleo/datos.js
+js/juego/main.js ──> js/juegos/index.js ──> js/juegos/<id>/escena.js ──> js/nucleo/util.js
+                 ──> js/juego/panel.js ──> js/juego/vistas.js
+                 ──> js/nucleo/jugador.js, js/nucleo/plano.js, js/nucleo/motor.js, js/nucleo/datos.js
 js/vr/main.js ─────> js/nucleo/datos.js        (versión en texto, sin 3D: no carga Three.js)
 ```
 
@@ -31,6 +34,8 @@ js/vr/main.js ─────> js/nucleo/datos.js        (versión en texto, sin
 | `motor.js` | Crea el renderizador WebGL, el entorno de luz (reflejos) y el bloom. Baja la calidad sola si el equipo va lento. |
 | `util.js` | Ayudas para modelar (`rrect`, `shell`, `mesh`, `canvasTex`, `basicGlow`), y detección de móvil, gama baja y "reducir movimiento". Usa Three.js. |
 | `datos.js` | `cargarJSON` y `esc` (escapar texto para HTML). No usa Three.js, así que sirve en cualquier página. |
+| `jugador.js` | Caminar en primera persona con colisiones: no deja salir de los límites ni entrar en los obstáculos. Lo usan el Lobby y las salas de los juegos. |
+| `plano.js` | El plano de la esquina (la habitación desde arriba y dónde estás). Lo usan el Lobby y las salas. |
 
 ### Modelos (`js/modelos/`)
 
@@ -52,7 +57,7 @@ js/vr/main.js ─────> js/nucleo/datos.js        (versión en texto, sin
 
 Es lo que se ve al entrar en las gafas. Tiene dos modos (atributo `data-modo` del `<body>`):
 
-- **pantalla**: vista sentada frente al monitor "Elige un juego", con 6 tarjetas en filas de 3 como en las gafas (los huecos sin juego salen como "Próximamente" con candado). Al tocar una tarjeta se abre la ficha del juego (provisional).
+- **pantalla**: vista sentada frente al monitor "Elige un juego", con 6 tarjetas en filas de 3 como en las gafas (los huecos sin juego salen como "Próximamente" con candado). Al tocar una tarjeta se entra en la sala del juego si la tiene (`"sala": true`) o, si no, se abre su ficha (provisional).
 - **libre**: primera persona. Se entra con el botón "Muévete libremente por la lobby" o la tecla **L**, que captura el ratón (pointer lock). W/S o ↑/↓ para avanzar y retroceder, A/D de lado, ←/→ o Q/E para girar, ratón para mirar, clic o Enter para tocar la pantalla donde apunta la mano (a menos de 3,5 m), **R** para volver a la pantalla, Esc para soltar el ratón. Si el navegador no deja capturar el ratón, se mira arrastrando.
 
 | Archivo | Qué hace |
@@ -60,9 +65,26 @@ Es lo que se ve al entrar en las gafas. Tiene dos modos (atributo `data-modo` de
 | `main.js` | Escena, cambio entre modos con animación de cámara, tocar tarjetas, ficha, tecla R y el indicador de la esquina (modo, controles y plano con tu posición). |
 | `sala.js` | La habitación: paredes, suelo de baldosas, mesa, silla, ventana, puerta, estantería, planta y cuadro. Exporta `LIMITES` (paredes) y devuelve `obstaculos` (muebles) para las colisiones. |
 | `pantalla.js` | El monitor: dibuja "Elige un juego" en un canvas con una tarjeta por juego de `datos/vr.json` y dice qué tarjeta hay en un punto (`tarjetaEn`). Los dibujos de las portadas están en `ICONOS`. |
-| `jugador.js` | Caminar en primera persona con colisiones: no deja salir de `LIMITES` ni entrar en los obstáculos. |
 
 En pantallas táctiles sin ratón no se ofrece el modo libre.
+
+### Sala de un juego (`vr/juego.html?id=<juego>` + `js/juego/` + `js/juegos/<id>/`)
+
+La sala 3D de cada juego, hoy la del **Bingo**, copiada de su escena de Unity (mismas medidas). Se entra desde su tarjeta del Lobby con un fundido a negro. Modos (`data-modo` del `<body>`):
+
+- **cine**: cinemática con la mirada fija, sentado a la mesa. En el Bingo, el bombo acelera, suelta la bola 18, la cámara la sigue por la rampa hasta la bandeja y se abre a la mesa entera. `Enter` (o clic) la salta y `Esc` vuelve al Lobby.
+- **mesa**: sentado. Cada objeto que se toca lleva una etiqueta encima (también es su botón de teclado). `L` pasa a moverse libremente.
+- **libre**: primera persona como en el Lobby; se toca lo que hay en el centro de la vista a menos de 2,5 m. `R` vuelve a la mesa.
+- **panel**: el objeto se acerca a la cámara y se abre su panel (90 % de la pantalla): el texto baja a la izquierda por secciones y la derecha muestra la captura o el dibujo de la sección que se lee. El **cartón** se despliega como un papel ("Cómo se juega", con capturas de Unity) y la **bola** se abre en círculo ("Cómo se guardan los datos", con datos de ejemplo).
+
+| Archivo | Qué hace |
+|---|---|
+| `js/juego/main.js` | Genérico para todos los juegos: modos, cámara guiada, etiquetas, tocar, acercar el objeto, teclado, indicador y volver al Lobby. |
+| `js/juego/panel.js` | El panel grande: monta las secciones, marca la que se lee (al bajar con rueda o con `↑↓`) y lo abre "desplegando" o "acercando". |
+| `js/juego/vistas.js` | Los dibujos de la derecha que no son capturas (archivo `.json`, medidas, barras por número, evolución, de las gafas al PC, privacidad). |
+| `js/juegos/index.js` | Catálogo de salas (se cargan bajo demanda). |
+| `js/juegos/bingo/escena.js` | La sala del Bingo: habitación, mesa, máquina con bombo que gira, rampa, bandeja, descarte, cesta, cartón, monitor y la bola; su cinemática y sus objetos que se tocan. |
+| `datos/juegos/bingo.json` | Los textos de los dos paneles y los datos de ejemplo. |
 
 ### Versión en texto (`vr/info.html`)
 
@@ -87,6 +109,10 @@ Todo se puede usar sin ratón. El foco inicial se pone cuando la interfaz ya es 
 | Lobby, modo pantalla | Al llegar está seleccionada la primera tarjeta. `Tab` o `←→↑↓` entre tarjetas (botones ocultos que resaltan la tarjeta), `Enter` abre la ficha, `L` modo libre, `Esc` quitarse las gafas y volver a la portada |
 | Lobby, modo libre | `W A S D`, `↑↓` caminar, `←→`/`Q E` girar, `Enter`/`Espacio` tocar, `R` volver |
 | Fichas | `Esc` cierra y el foco vuelve a donde estaba |
+| Sala de un juego, cinemática | `Enter`, `Espacio` o `→` la saltan; `Esc` vuelve al Lobby |
+| Sala de un juego, mesa | Al acabar la cinemática está seleccionado el primer objeto. `←→` entre objetos, `Enter` lo abre, `L` modo libre, `Esc` vuelve al Lobby (y queda seleccionada la tarjeta del juego) |
+| Sala de un juego, modo libre | Como en el Lobby; `R` vuelve a la mesa |
+| Panel de un objeto | `↓`/`Av Pág`/`Espacio` siguiente sección, `↑`/`Re Pág` anterior, `Inicio`/`Fin`, `Esc` cierra |
 
 ## Accesibilidad y rendimiento
 

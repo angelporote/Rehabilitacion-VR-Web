@@ -1,0 +1,313 @@
+{
+  "_ayuda": "Contenido de la sala del Bingo (vr/juego.html?id=bingo). 'paneles' tiene un panel por objeto que se toca en la sala (su 'id' es el de js/juegos/bingo/escena.js). Cada sección se lee a la izquierda y, a la derecha, muestra su 'imagen' (captura de img/vr/bingo/) o su 'vista' (un dibujo de js/juego/vistas.js). Textos sacados de la README del Bingo y de la guía de medición del proyecto Unity; pendientes de revisar por Ángel.",
+  "id": "bingo",
+  "nombre": "Bingo",
+  "lema": "Recuerda tu cartón y coge tus bolas",
+  "color": "#E8A93A",
+  "cinematica": "El bombo gira y suelta una bola",
+  "paneles": {
+    "carton": {
+      "etiqueta": "Cómo se juega",
+      "titulo": "Cómo se juega al Bingo",
+      "intro": "Un bingo de memoria y pinza, para jugar sentado y solo con las manos. Sobre la mesa hay una máquina de bingo, una bandeja, la cesta del paciente y su cartón.",
+      "secciones": [
+        {
+          "titulo": "1. Elige el nivel",
+          "texto": "Tres niveles. Cambian cuántos números tiene el cartón, de qué rango salen, cuántas bolas no son tuyas y cuánto espera cada bola en la bandeja.",
+          "tabla": [
+            [
+              "Nivel",
+              "Cartón",
+              "Números",
+              "Bola en la bandeja",
+              "Cartón"
+            ],
+            [
+              "Fácil",
+              "4",
+              "1 a 20",
+              "10 s",
+              "A la vista"
+            ],
+            [
+              "Normal",
+              "6",
+              "1 a 30",
+              "8 s",
+              "Tapado"
+            ],
+            [
+              "Difícil",
+              "8",
+              "1 a 60",
+              "7 s",
+              "Tapado"
+            ]
+          ],
+          "imagen": "../img/vr/bingo/01-niveles.jpg",
+          "pie": "La pantalla de elegir nivel."
+        },
+        {
+          "titulo": "2. Memoriza tu cartón",
+          "texto": "El cartón está destapado el tiempo que haga falta, sin prisa. Cuando el paciente se los sabe, pulsa «¡Me los sé!» con la punta del dedo.",
+          "imagen": "../img/vr/bingo/02-memorizar.jpg",
+          "pie": "Fácil: 4 números que estarán a la vista toda la partida."
+        },
+        {
+          "titulo": "3. Sale una bola",
+          "texto": "El bombo gira y suelta las bolas de una en una. Cada bola baja por la rampa y espera quieta en la bandeja. Solo entonces se puede coger.",
+          "imagen": "../img/vr/bingo/03-bola-en-bandeja.jpg",
+          "pie": "La bola espera en la bandeja, delante a la derecha."
+        },
+        {
+          "titulo": "4. ¿Es mía? Cógela con pinza",
+          "texto": "Si el número está en su cartón, el paciente alarga el brazo y la coge pellizcando, como los objetos de la Cocina. Solo se puede coger con la punta del dedo a menos de 15 cm: no vale un rayo a distancia.",
+          "imagen": "../img/vr/bingo/04-bola-de-cerca.jpg",
+          "pie": "La bola mide 6,8 cm y su número siempre mira a los ojos."
+        },
+        {
+          "titulo": "5. A la cesta",
+          "texto": "Basta con soltarla encima de la cesta: se coloca sola en su hueco. Solo suena un clic neutro, sin decir si era suya. La decisión es del paciente hasta el final.",
+          "imagen": "../img/vr/bingo/05-bola-en-la-mano.jpg",
+          "pie": "Con la bola en la mano, su tiempo se para."
+        },
+        {
+          "titulo": "6. Si se cae, vuelve",
+          "texto": "Si la suelta fuera de la cesta o de la mesa, la bola vuelve sola y despacio a la bandeja, y le quedan al menos 3 segundos. Nada obliga a agacharse.",
+          "imagen": "../img/vr/bingo/06-vuelve-a-la-bandeja.jpg",
+          "pie": "Cuenta como una caída, sin castigo."
+        },
+        {
+          "titulo": "7. Si no es tuya, déjala pasar",
+          "texto": "Pasado su tiempo, la bola se va sola rodando al agujero de descarte. Si era suya, queda omitida y no vuelve a salir.",
+          "imagen": "../img/vr/bingo/10-descarte.jpg",
+          "pie": "El agujero negro, a la derecha de la bandeja."
+        },
+        {
+          "titulo": "8. En Normal y Difícil, el cartón se tapa",
+          "texto": "Hay que recordar 6 u 8 números mientras salen bolas que no son suyas. Tocando el cartón con el índice se destapa 3 segundos, todas las veces que quiera. Cuenta como una ayuda.",
+          "imagen": "../img/vr/bingo/08-mirar-carton.jpg",
+          "pie": "La tapa con «?» se levanta al tocarla."
+        },
+        {
+          "titulo": "9. Comprobamos la cesta",
+          "texto": "La partida acaba cuando la cesta tiene tantas bolas como números el cartón, o cuando se vacía el bombo. Se destapa el cartón y se repasa la cesta bola a bola: en verde las suyas, en gris las que no lo eran y en naranja las casillas de los números que dejó pasar.",
+          "imagen": "../img/vr/bingo/13-final-cesta.jpg",
+          "pie": "Verde: suya. Gris: no era suya. Naranja: se le pasó."
+        },
+        {
+          "titulo": "10. ¡BINGO! o ¡Buen trabajo!",
+          "texto": "«¡BINGO!» si todas las bolas de la cesta son suyas y no falta ninguna. Si no, «¡Buen trabajo!», con lo que faltó («Te faltó el 28»). Sin castigos: solo información, y siempre se puede volver a jugar.",
+          "imagen": "../img/vr/bingo/12-final.jpg",
+          "pie": "Otra vez, otro nivel o volver a los juegos."
+        },
+        {
+          "titulo": "Qué trabaja",
+          "lista": [
+            "Memoria de trabajo: recordar el cartón tapado mientras salen bolas que no son suyas.",
+            "Atención selectiva e inhibición: decidir con cada bola «¿es mía?» y dejar pasar las demás.",
+            "Pinza fina: coger una bola de 6,8 cm pellizcando.",
+            "Alcance y transporte: unos 25 cm de la bandeja a la cesta, con el brazo sobre la mesa.",
+            "Velocidad de procesamiento: el tiempo hasta coger cada bola y hasta dejarla en la cesta."
+          ],
+          "imagen": "../img/vr/bingo/11-comprobando.jpg",
+          "pie": "Todo está a menos de 75 cm de los ojos, sobre la mesa."
+        }
+      ]
+    },
+    "bola": {
+      "etiqueta": "Cómo se guardan los datos",
+      "titulo": "Qué se guarda de cada partida",
+      "intro": "Cada partida de Bingo deja un informe para el terapeuta. Los números de esta página son un ejemplo: nunca se muestran datos de pacientes reales.",
+      "secciones": [
+        {
+          "titulo": "Un archivo por partida",
+          "texto": "Al terminar (o al volver al Lobby a media partida), las gafas guardan un archivo con el juego, el nivel, la duración, una frase de resumen, las medidas y un registro por cada número del cartón.",
+          "vista": "json"
+        },
+        {
+          "titulo": "Las medidas comunes",
+          "texto": "Las mismas en todos los juegos, para poder compararlos. En el Bingo, un acierto es una bola suya en la cesta, un error es meter una que no era suya, una omisión es dejar pasar una suya y una pista es destapar el cartón.",
+          "vista": "comunes"
+        },
+        {
+          "titulo": "Las medidas propias del Bingo",
+          "texto": "Además, el Bingo guarda lo que es suyo: caídas, tiempo de transporte, cuánto tardó en memorizar y cómo era el nivel, para comparar sesiones aunque se ajuste.",
+          "vista": "propias"
+        },
+        {
+          "titulo": "Un registro por número",
+          "texto": "Por cada número del cartón se guarda cuánto tardó en coger su bola desde que llegó a la bandeja, cuánto tardó en llevarla a la cesta y si se le pasó.",
+          "vista": "pasos"
+        },
+        {
+          "titulo": "Cómo se evalúa",
+          "texto": "Al guardar se calculan la precisión y los aciertos por minuto. Las tendencias se miran dentro del mismo juego y nivel, y con al menos 3 sesiones. Se mide, no se castiga: el paciente nunca ve «errores».",
+          "vista": "evolucion"
+        },
+        {
+          "titulo": "Dónde quedan",
+          "texto": "Del PC del centro no sale nada. Los archivos se copian de las gafas a una carpeta del PC. Allí se rehacen dos tablas que se abren con Excel y un informe por paciente con gráficas, que funciona sin internet.",
+          "vista": "flujo"
+        },
+        {
+          "titulo": "Privacidad",
+          "texto": "Son datos de salud. Solo se guarda un código de paciente (de P-000 a P-999), que el terapeuta mete con un teclado numérico en el Lobby. Nunca el nombre, la fecha de nacimiento ni nada que lo identifique.",
+          "vista": "privacidad"
+        }
+      ],
+      "ejemplo": {
+        "formatVersion": 2,
+        "patient": "P-000",
+        "game": "Bingo",
+        "level": "Normal",
+        "levelIndex": 1,
+        "durationSeconds": 262,
+        "completed": true,
+        "endReason": "completada",
+        "summary": "5 de 6 números en la cesta. 1 bola no era suya. Te faltó el 28.",
+        "comunes": [
+          [
+            "aciertos",
+            5,
+            "",
+            "Bolas suyas en la cesta"
+          ],
+          [
+            "errores",
+            1,
+            "",
+            "Bolas en la cesta que no eran suyas"
+          ],
+          [
+            "omisiones",
+            1,
+            "",
+            "Bolas suyas que dejó pasar"
+          ],
+          [
+            "pistas",
+            2,
+            "",
+            "Veces que destapó el cartón"
+          ],
+          [
+            "tiempo_reaccion_medio",
+            2.4,
+            "s",
+            "De bola en la bandeja a cogerla"
+          ]
+        ],
+        "derivadas": [
+          [
+            "precision",
+            71.4,
+            "%",
+            "aciertos / (aciertos + errores + omisiones)"
+          ],
+          [
+            "aciertos_por_minuto",
+            1.15,
+            "/min",
+            "aciertos / minutos de juego"
+          ]
+        ],
+        "propias": [
+          [
+            "bingo",
+            0,
+            "",
+            "1 si todo lo de la cesta era suyo y no faltó ninguna"
+          ],
+          [
+            "numeros_carton",
+            6,
+            "",
+            "Números del cartón"
+          ],
+          [
+            "bolas",
+            14,
+            "",
+            "Bolas que salieron"
+          ],
+          [
+            "caidas",
+            1,
+            "",
+            "Veces que la soltó fuera de la cesta"
+          ],
+          [
+            "tiempo_transporte_medio",
+            1.3,
+            "s",
+            "De cogerla a dejarla en la cesta"
+          ],
+          [
+            "tiempo_memorizar",
+            18.5,
+            "s",
+            "Hasta pulsar «¡Me los sé!»"
+          ],
+          [
+            "carton_visible",
+            0,
+            "",
+            "0 = tapado"
+          ],
+          [
+            "numero_maximo",
+            30,
+            "",
+            "Números del 1 al 30"
+          ]
+        ],
+        "pasos": [
+          [
+            "Número 5",
+            1.9,
+            1.1,
+            0
+          ],
+          [
+            "Número 8",
+            2.6,
+            1.4,
+            0
+          ],
+          [
+            "Número 17",
+            3.1,
+            1.2,
+            0
+          ],
+          [
+            "Número 20",
+            2.2,
+            1.6,
+            0
+          ],
+          [
+            "Número 25",
+            2.0,
+            1.2,
+            0
+          ],
+          [
+            "Número 28",
+            -1,
+            -1,
+            1
+          ]
+        ],
+        "evolucion": [
+          58,
+          63,
+          67,
+          64,
+          71
+        ]
+      }
+    }
+  }
+}

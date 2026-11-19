@@ -68,3 +68,7 @@ a,button,.label,[role=button]{cursor:var(--cursor-dedo)}
 .solo-lector{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
 kbd{display:inline-block;min-width:1.5em;padding:.05rem .4rem;border:1px solid var(--edge);border-bottom-width:2px;border-radius:6px;font:600 .78rem var(--font);background:rgba(255,255,255,.06);text-align:center}
+
+/* Fundido a negro entre el Lobby y la sala de un juego */
+.fundido-negro{position:fixed;inset:0;background:#000;z-index:30;pointer-events:none;opacity:0;visibility:hidden}
+.fundido .fundido-negro{opacity:1;visibility:visible}

@@ -59,6 +59,21 @@ Añade una entrada a `juegos` en `datos/vr.json` y su captura en `img/vr/` (960 
 }
 ```
 
+## La sala 3D de un juego
+
+Un juego puede tener su propia sala (como el Bingo): al tocar su tarjeta en el Lobby se entra en `vr/juego.html?id=<id>` en vez de abrir la ficha. Pasos:
+
+1. **La sala**: crea `js/juegos/<id>/escena.js` con una función `crear({ scene })` que devuelva:
+   - `limites` y `obstaculos` (para caminar con colisiones), `silla` (se oculta sentado), `vistaMesa()` (`{ pos, mira }`) e `inicioLibre` (`{ x, z, mira }`);
+   - `tocables`: los objetos que se tocan, cada uno con `id` (el del panel), `nombre`, `objeto`, `estilo` (`"desplegar"` o `"acercar"`), `ancla()` (dónde va su etiqueta) y `resaltar(on, gsap)`;
+   - `cinematica(tl, cam)` (rellena una línea de tiempo de GSAP moviendo `cam.pos`, `cam.mira` y `cam.fov`), `finCinematica()`, `animar(t, dt, camera)` y `dibujarPlano(g, X, Z, k)`.
+   Copia `js/juegos/bingo/escena.js` como punto de partida: usa las medidas de la escena de Unity.
+2. **Regístrala** en `js/juegos/index.js`.
+3. **Los textos**: `datos/juegos/<id>.json`, con un panel por objeto en `paneles`. Cada sección tiene `titulo`, `texto` (y si quieres `lista` o `tabla`) y, para la derecha, una `imagen` (capturas en `img/vr/<id>/`) o una `vista` de `js/juego/vistas.js` (`json`, `comunes`, `propias`, `pasos`, `evolucion`, `flujo`, `privacidad`), que se dibujan con los datos de `ejemplo`.
+4. **Actívala** con `"sala": true` en su entrada de `datos/vr.json`.
+
+Los datos de las vistas son siempre de ejemplo: nunca de pacientes reales.
+
 ## Antes de subir cambios
 
 - Sirve la web en local (`python3 -m http.server`) y prueba la portada, el Lobby (los dos modos) y la versión en texto, también con la ventana estrecha (móvil).

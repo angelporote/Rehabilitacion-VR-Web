@@ -10,8 +10,9 @@
   - js/lobby/main.js      → modos "pantalla" y "libre", indicador y ficha de cada juego
   - js/lobby/sala.js      → la habitación y sus obstáculos (colisiones)
   - js/lobby/pantalla.js  → el monitor "Elige un juego" (sale de datos/vr.json)
-  - js/lobby/jugador.js   → caminar en primera persona con colisiones
+  - js/nucleo/jugador.js  → caminar en primera persona con colisiones
   - info.html             → la misma información en texto, sin 3D
+  - juego.html?id=<juego> → la sala 3D de un juego (si tiene "sala": true en datos/vr.json)
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,6 +35,7 @@
 <canvas id="scene" aria-label="El Lobby en 3D: una habitación con una mesa y la pantalla para elegir un juego"></canvas>
 <div class="loader" id="loader">Entrando en el Lobby…</div>
 <div class="visor" id="visor" aria-hidden="true"></div>
+<div class="fundido-negro" aria-hidden="true"></div>
 
 <div class="lobby-ui">
   <a class="ghost salir" id="salir" href="../">
