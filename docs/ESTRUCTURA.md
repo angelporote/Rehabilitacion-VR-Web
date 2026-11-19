@@ -79,12 +79,12 @@ Dos dibujos SVG en `img/cursor/`, translúcidos como las manos de Unity y difumi
 
 ## Teclado
 
-Todo se puede usar sin ratón:
+Todo se puede usar sin ratón. El foco inicial se pone cuando la interfaz ya es visible (un elemento oculto con `visibility:hidden` pierde el foco).
 
 | Dónde | Teclas |
 |---|---|
-| Portada | `Tab` hasta la etiqueta de las gafas, `←→↑↓` las giran, `Enter` entra |
-| Lobby, modo pantalla | `Tab` o `←→↑↓` entre las tarjetas (botones ocultos que resaltan la tarjeta), `Enter` abre la ficha, `L` modo libre |
+| Portada | Al cargar está seleccionado **Conocer el proyecto** (`Enter` ya entra). `→` selecciona las gafas y se encienden, `←` vuelve al botón, `↑↓` giran las gafas, `Enter` entra con la cinemática |
+| Lobby, modo pantalla | Al llegar está seleccionada la primera tarjeta. `Tab` o `←→↑↓` entre tarjetas (botones ocultos que resaltan la tarjeta), `Enter` abre la ficha, `L` modo libre, `Esc` quitarse las gafas y volver a la portada |
 | Lobby, modo libre | `W A S D`, `↑↓` caminar, `←→`/`Q E` girar, `Enter`/`Espacio` tocar, `R` volver |
 | Fichas | `Esc` cierra y el foco vuelve a donde estaba |
 

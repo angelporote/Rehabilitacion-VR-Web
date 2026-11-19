@@ -91,6 +91,10 @@ addEventListener('keydown', e => { if(e.key === 'Escape') cerrarFicha(); });
 /* ---------- Cinemática al volver del Lobby: nos quitamos las gafas ----------
    Empezamos con la vista cerrada en las lentes y las gafas pegadas a la cara;
    las lentes se abren, las gafas se apartan y vuelven a su mesita. */
+// «Conocer el proyecto» seleccionado de inicio (Enter ya entra). Se enfoca cuando el texto
+// ya es visible: un elemento con visibility:hidden pierde el foco.
+function seleccionarInicio(){ if(document.activeElement === document.body) cta.focus({ preventScroll:true }); }
+
 function quitarseGafas(){
   let viene = false;
   try{ viene = !!sessionStorage.getItem('rvr-quitar'); sessionStorage.removeItem('rvr-quitar'); }catch{}
@@ -111,7 +115,7 @@ function quitarseGafas(){
   gsap.set(visor, { autoAlpha:1, '--r':'0vmax' });
   document.documentElement.classList.remove('quitar');
   gsap.set([hero, '#labels', '.sombra', '.top'], { autoAlpha:0 });
-  gsap.timeline({ onComplete:() => { obj.fijo = false; escaparate.bloquear(false); } })
+  gsap.timeline({ onComplete:() => { obj.fijo = false; escaparate.bloquear(false); seleccionarInicio(); } })
     .to(visor, { '--r':'80vmax', duration:1.0, ease:'power2.out' }, 0.2)
     .set(visor, { autoAlpha:0 }, 1.2)
     .to(obj.raiz.position, { x:casa.x, y:casa.y + 1, z:casa.z + 2, duration:1.3, ease:'power2.out' }, 0.5)
@@ -122,6 +126,27 @@ function quitarseGafas(){
     .to(['#labels', '.top'], { autoAlpha:1, duration:0.6 }, 2.6);
   return true;
 }
+
+/* ---------- Teclado en la portada ----------
+   Al empezar está seleccionado "Conocer el proyecto". ←→ van de un elemento a otro
+   (botón, gafas…): al seleccionar las gafas se encienden. Enter entra. */
+const cta = document.getElementById('cta');
+const enfocables = () => [cta, ...escaparate.objetos.map(o => o.etiqueta)];
+addEventListener('keydown', e => {
+  if(!escaparate || e.ctrlKey || e.metaKey || e.altKey) return;
+  const mov = { ArrowRight:1, ArrowLeft:-1 }[e.key];
+  if(mov === undefined) return;
+  const lista = enfocables(), i = lista.indexOf(document.activeElement);
+  const sig = lista[Math.min(lista.length - 1, Math.max(0, (i < 0 ? 0 : i + mov)))];
+  if(sig){ e.preventDefault(); sig.focus({ preventScroll:true }); }
+});
+// "Conocer el proyecto" también se pone las gafas (misma cinemática que tocarlas)
+cta.addEventListener('click', e => {
+  const gafas = escaparate && escaparate.objetos.find(o => o.datos.accion === 'entrar');
+  if(!gafas) return;                   // si la escena no cargó, el enlace funciona normal
+  e.preventDefault();
+  entrar(gafas);
+});
 
 /* ---------- Tamaño de pantalla ---------- */
 function redimensionar(){
@@ -159,7 +184,7 @@ function bucle(){
     motor.renderer.setAnimationLoop(bucle);
     document.getElementById('loader').classList.add('done');
     if(!quitarseGafas()){
-      gsap.from(hero, { autoAlpha:0, y:24, duration:D(0.9), ease:'power3.out' });
+      gsap.from(hero, { autoAlpha:0, y:24, duration:D(0.9), ease:'power3.out', onComplete:seleccionarInicio });
       gsap.from('#labels', { autoAlpha:0, duration:D(0.8), delay:D(0.4) });
     }
     // Texturas costosas, cuando la página ya se ve

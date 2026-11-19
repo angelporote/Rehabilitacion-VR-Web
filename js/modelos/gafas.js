@@ -66,6 +66,18 @@ export function crear(){
   // Todo proyecta y recibe sombra suave del entorno
   grupo.traverse(o => { if(o.isMesh) o.userData.esGafas = true; });
 
+  // Encender / apagar: al seleccionarlas (ratón o teclado) la franja brilla más y el frontal se ilumina
+  const apagada = new THREE.Color(0x5FF2D2).multiplyScalar(1.2), encendida = new THREE.Color(0x5FF2D2).multiplyScalar(4.5);
+  brillo.color.copy(apagada);
+  frontal.emissive = new THREE.Color(0x2FD8BC); frontal.emissiveIntensity = 0;
+  const luz = { k:0 };
+  grupo.userData.encender = (on, gsap) => {
+    const fin = on ? 1 : 0;
+    const pintar = () => { brillo.color.lerpColors(apagada, encendida, luz.k); frontal.emissiveIntensity = luz.k * 0.22; };
+    if(gsap) gsap.to(luz, { k:fin, duration:0.45, ease:'power2.out', onUpdate:pintar, overwrite:true });
+    else { luz.k = fin; pintar(); }
+  };
+
   // Punto "dentro de las lentes": hacia dónde viaja la cámara al entrar en el proyecto
   const entrada = new THREE.Object3D(); entrada.position.set(0, 0.05, 0.2); grupo.add(entrada);
   grupo.userData.entrada = entrada;

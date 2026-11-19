@@ -167,6 +167,8 @@ addEventListener('keydown', e => {
   if(e.ctrlKey || e.metaKey || e.altKey) return;
   const enFicha = ficha.classList.contains('open');
   if(e.code === 'Escape' && enFicha){ cerrarFicha(); return; }
+  // Esc: quitarse las gafas y volver a la portada (con el ratón capturado, el primer Esc solo lo suelta: lo hace el navegador)
+  if(e.code === 'Escape' && !enFicha){ quitarseGafas(); return; }
   if(enFicha) return;                                                    // con la ficha abierta, el teclado es para ella
   if(e.code === 'KeyR'){ volverPantalla(); return; }
   if(modo === 'pantalla'){
@@ -215,8 +217,8 @@ function pintarIndicador(){
   const libre = modo === 'libre';
   $('indModo').textContent = libre ? 'Modo libre' : modo === 'viaje' ? '…' : 'Modo pantalla';
   $('indAyuda').innerHTML = libre
-    ? `<li><kbd>W A S D</kbd> o <kbd>↑↓</kbd> moverte</li><li><kbd>Ratón</kbd>, <kbd>←→</kbd> o <kbd>Q E</kbd> mirar</li><li><kbd>Clic</kbd> o <kbd>Enter</kbd> tocar la pantalla</li><li><kbd>R</kbd> volver a la pantalla</li>${capturado() ? '<li><kbd>Esc</kbd> soltar el ratón</li>' : ''}`
-    : `<li><kbd>Clic</kbd> en un juego, o <kbd>Tab</kbd>/<kbd>←↑↓→</kbd> y <kbd>Enter</kbd></li><li><kbd>L</kbd> moverte libremente</li>`;
+    ? `<li><kbd>W A S D</kbd> o <kbd>↑↓</kbd> moverte</li><li><kbd>Ratón</kbd>, <kbd>←→</kbd> o <kbd>Q E</kbd> mirar</li><li><kbd>Clic</kbd> o <kbd>Enter</kbd> tocar la pantalla</li><li><kbd>R</kbd> volver a la pantalla</li><li><kbd>Esc</kbd> ${capturado() ? 'soltar el ratón' : 'quitarse las gafas'}</li>`
+    : `<li><kbd>Clic</kbd> en un juego, o <kbd>←↑↓→</kbd> y <kbd>Enter</kbd></li><li><kbd>L</kbd> moverte libremente</li><li><kbd>Esc</kbd> quitarse las gafas</li>`;
 }
 function pintarPlano(){
   const { x0, x1, z0, z1 } = LIMITES, w = plano.width, h = plano.height, m = 8;
@@ -283,6 +285,12 @@ function quitarseGafas(e){
 $('salir').addEventListener('click', quitarseGafas);
 
 /* ---------- Arranque ---------- */
+// Seleccionada de inicio la primera tarjeta (Enter ya la abre), cuando la interfaz ya se ve
+function seleccionarInicio(){
+  if(document.activeElement !== document.body || modo !== 'pantalla') return;
+  const primera = botonesTarjeta.find(Boolean); primera && primera.focus({ preventScroll:true });
+}
+
 (async () => {
   try{
     const datos = await cargarJSON('../datos/vr.json');
@@ -295,7 +303,7 @@ $('salir').addEventListener('click', quitarseGafas);
     $('loader').classList.add('done');
     // Moverse libremente necesita teclado: en pantallas táctiles sin ratón no se ofrece
     if(matchMedia('(hover: none) and (pointer: coarse)').matches) cuerpo.classList.add('tactil');
-    gsap.from('.lobby-ui > *', { autoAlpha:0, y:12, duration:D(0.6), stagger:0.08, delay:D(0.2) });
+    gsap.from('.lobby-ui > *', { autoAlpha:0, y:12, duration:D(0.6), stagger:0.08, delay:D(0.2), onComplete:seleccionarInicio });
     abrirVisor();
   }catch(err){
     console.error(err);

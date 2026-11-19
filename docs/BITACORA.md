@@ -4,6 +4,18 @@ Diario del trabajo en la web: qué se hizo, qué se decidió (y por qué) y qué
 
 ---
 
+## 19/11/2026 · Teclado de principio a fin
+
+**Hecho**
+- Portada: al cargar está seleccionado **"Conocer el proyecto"**; `→` selecciona las gafas, que **se encienden** (luz frontal y tira de luz más brillantes); `←` vuelve al botón; `Enter` entra con la cinemática de ponerse las gafas. El botón también usa la cinemática al pulsarlo con el ratón.
+- Lobby: al llegar está seleccionada la primera tarjeta; `Esc` hace la cinemática de quitarse las gafas y vuelve a la portada (si hay una ficha abierta, `Esc` primero la cierra).
+- Al volver a la portada, "Conocer el proyecto" queda seleccionado otra vez.
+
+**Decidido**
+- `↑↓` en las gafas siguen girándolas; `←→` pasan a moverse entre botón y gafas.
+
+---
+
 ## 19/11/2026 · Seis huecos, cinemáticas y teclado
 
 **Hecho**

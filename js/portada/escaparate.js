@@ -48,14 +48,15 @@ export async function crearEscaparate({ scene, camera, lienzo, datos, alActivar,
     etiqueta.addEventListener('click', () => activar(obj));
     etiqueta.addEventListener('pointerenter', () => marcar(obj, true));
     etiqueta.addEventListener('pointerleave', () => marcar(obj, false));
-    // Con teclado: Tab llega a la etiqueta, las flechas giran el objeto y Enter lo abre
+    // Con teclado: Tab o → llegan a la etiqueta (el objeto se enciende) y Enter lo abre
     etiqueta.addEventListener('focus', () => marcar(obj, true));
     etiqueta.addEventListener('blur', () => marcar(obj, false));
+    // ↑↓ giran el objeto (←→ sirven para ir de un elemento a otro: lo gestiona la portada)
     etiqueta.addEventListener('keydown', e => {
-      const g = { ArrowLeft:[0,-0.35], ArrowRight:[0,0.35], ArrowUp:[-0.25,0], ArrowDown:[0.25,0] }[e.key];
-      if(!g) return;
+      const g = { ArrowUp:-0.4, ArrowDown:0.4 }[e.key];
+      if(g === undefined) return;
       e.preventDefault();
-      obj.rot.x = THREE.MathUtils.clamp(obj.rot.x + g[0], -1.1, 1.1); obj.rot.y += g[1];
+      obj.rot.y += g;
     });
     objetos.push(obj);
   }
@@ -105,6 +106,7 @@ export async function crearEscaparate({ scene, camera, lienzo, datos, alActivar,
     if(obj.hover === on) return;
     obj.hover = on;
     obj.etiqueta.classList.toggle('on', on);
+    obj.modelo.userData.encender && obj.modelo.userData.encender(on, reduceMotion ? null : gsap);   // las gafas se encienden
     gsap.to(obj.ajuste.scale, { x:obj.ajuste.scale.x/(on?1:1.07)*(on?1.07:1), y:obj.ajuste.scale.y/(on?1:1.07)*(on?1.07:1), z:obj.ajuste.scale.z/(on?1:1.07)*(on?1.07:1), duration:D(0.35), ease:'power2.out', overwrite:true });
   }
   lienzo.addEventListener('pointermove', e => {
