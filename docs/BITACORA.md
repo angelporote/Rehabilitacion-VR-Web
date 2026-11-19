@@ -4,6 +4,26 @@ Diario del trabajo en la web: qué se hizo, qué se decidió (y por qué) y qué
 
 ---
 
+## 19/11/2026 · El Lobby en 3D y la mano VR
+
+**Hecho**
+- Al entrar en las gafas apareces en el **Lobby**, copiado de la habitación del proyecto (paredes crema, suelo de baldosas, mesa de madera y la pantalla "Elige un juego" con Receta de Cocina, Memoria de cartas y Bingo). Se miraron las capturas `navegacion_01_lobby` y `arte_despues_lobby`.
+- Botón **"Muévete libremente por la lobby"**: convierte la web en un videojuego en primera persona. WASD o flechas para caminar, ratón para mirar, clic para tocar la pantalla.
+- **Colisiones** con las paredes y los muebles (mesa, silla, estantería y planta).
+- Tecla y botón **R** para volver a la pantalla.
+- **Indicador** en la esquina inferior derecha: modo actual, controles y un plano con tu posición y hacia dónde miras.
+- **Cursor de mano VR** en toda la web: mano abierta y dedo índice sobre lo que se puede tocar.
+- La página de información en texto pasa a `vr/info.html`, enlazada desde el Lobby.
+
+**Decisiones**
+- Las tarjetas de la pantalla salen de `datos/vr.json`: un juego nuevo aparece solo en el Lobby.
+- En móviles y tabletas sin ratón no se ofrece el modo libre (necesita teclado).
+
+**Pendiente**
+- **Decidir cómo se muestra la información de cada juego** al tocarlo. Por ahora sale una ficha provisional con un enlace a la versión en texto.
+
+---
+
 ## 19/11/2026 · Solo las gafas, en un salón de casa
 
 **Hecho**

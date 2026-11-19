@@ -1,0 +1,68 @@
+/* =========================================================
+   lobby.css · El Lobby 3D (vr/): botones, indicador, mano y ficha
+   body[data-modo] = "pantalla" | "libre" | "viaje"
+   ========================================================= */
+html,body.lobby{height:100%;overflow:hidden}
+#scene{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#scene.sobre{cursor:var(--cursor-dedo)}
+.lobby.capturado #scene{cursor:none}
+
+.lobby-ui > *{position:fixed;z-index:5}
+.salir{top:1.2rem;left:var(--gutter)}
+.texto{bottom:1.2rem;left:var(--gutter);font-size:.82rem;color:var(--dim);text-decoration:underline;text-underline-offset:3px}
+kbd{display:inline-block;min-width:1.5em;padding:.05rem .4rem;border:1px solid var(--edge);border-bottom-width:2px;border-radius:6px;font:600 .78rem var(--font);background:rgba(255,255,255,.06);text-align:center}
+
+/* Botón para pasar a primera persona: pequeño, abajo en el centro */
+.libre{left:50%;bottom:1.3rem;transform:translateX(-50%);display:inline-flex;align-items:center;gap:.55rem;border:1px solid rgba(95,242,210,.5);
+  background:var(--panel);color:var(--text);border-radius:99px;padding:.6rem 1.1rem;font-size:.88rem;font-weight:600;white-space:nowrap;transition:border-color .2s, box-shadow .2s}
+.libre:hover{border-color:var(--bio);box-shadow:0 8px 30px -10px rgba(95,242,210,.7)}
+.libre svg{width:18px;height:18px;color:var(--bio)}
+.solo-raton{display:none;left:50%;bottom:1.3rem;transform:translateX(-50%);margin:0;font-size:.8rem;color:var(--dim);background:var(--panel);border-radius:99px;padding:.45rem .9rem;white-space:nowrap}
+.tactil .libre{display:none}
+.tactil .solo-raton{display:block}
+
+/* "R": volver a la pantalla (solo en modo libre) */
+.volver{top:1.2rem;right:var(--gutter);display:none}
+[data-modo="libre"] .volver{display:inline-flex}
+[data-modo="libre"] .libre,[data-modo="viaje"] .libre,[data-modo="libre"] .solo-raton{display:none}
+
+/* Indicador de la esquina */
+.indicador{right:var(--gutter);bottom:1.2rem;width:178px;background:var(--panel);border:1px solid var(--edge);border-radius:16px;padding:.8rem .9rem .7rem;font-size:.78rem;color:var(--dim)}
+.indicador b{display:flex;align-items:center;gap:.45rem;color:var(--text);font-size:.85rem;margin-bottom:.45rem}
+.indicador b::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--warm)}
+[data-modo="libre"] .indicador b::before{background:var(--bio);box-shadow:0 0 10px var(--bio)}
+.indicador ul{list-style:none;margin:0 0 .6rem;padding:0}
+.indicador li{margin-bottom:.3rem;line-height:1.5}
+.indicador li kbd{font-size:.7rem}
+.indicador canvas{display:block;width:150px;height:170px;margin:0 auto}
+
+/* Mano VR en el centro (ratón capturado). La punta del índice marca el centro exacto */
+.mano{position:fixed;left:50%;top:50%;width:44px;height:44px;margin:-3px 0 0 -16px;z-index:4;pointer-events:none;display:none;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+.capturado[data-modo="libre"] .mano{display:block}
+.mano.toca{animation:toca .25s ease-out}
+@keyframes toca{40%{transform:translateY(-6px) scale(.9)}100%{transform:none}}
+
+/* Aviso de pausa: en modo libre con el ratón suelto */
+.pausa{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;background:var(--panel);border:1px solid var(--edge);border-radius:99px;padding:.7rem 1.2rem;font-size:.9rem;pointer-events:none;display:none;white-space:nowrap}
+[data-modo="libre"]:not(.capturado) .pausa{display:block}
+.lobby.tactil .pausa{display:none}
+
+/* Ficha de un juego */
+.ficha{position:fixed;top:50%;left:50%;width:min(440px,92vw);transform:translate(-50%,-46%);z-index:8;background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid var(--edge);border-radius:20px;padding:1.6rem;opacity:0;visibility:hidden;transition:opacity .3s, transform .3s, visibility 0s linear .3s}
+.ficha.open{opacity:1;visibility:visible;transform:translate(-50%,-50%);transition:opacity .3s, transform .3s}
+.ficha .fam{display:inline-block;font-size:.78rem;font-weight:600;color:#fff;background:var(--c);border-radius:99px;padding:.2rem .7rem;margin-bottom:.8rem}
+.ficha h2{margin:0 0 .6rem;font-size:1.6rem;letter-spacing:-.02em}
+.ficha p{margin:0 0 1rem;color:#E4D9CC;line-height:1.6;font-size:.95rem}
+.ficha .nota{color:var(--bio);font-size:.85rem}
+.ficha .cerrar{position:absolute;top:1rem;right:1rem;width:34px;height:34px;border-radius:50%;border:1px solid var(--edge);background:transparent;display:grid;place-items:center}
+
+.loader{position:fixed;inset:0;display:grid;place-items:center;z-index:10;color:#3A2A1E;background:#D9C6A6;font-size:.95rem;transition:opacity .6s;text-align:center;padding:2rem}
+.loader.done{opacity:0;pointer-events:none}
+
+@media (max-width:760px){
+  .indicador{top:4.4rem;bottom:auto;width:140px;padding:.6rem .7rem}
+  .indicador canvas{width:100px;height:113px}
+  .texto{display:none}
+}
+@media (prefers-reduced-motion:reduce){ .ficha,.ficha.open{transition:none} .mano.toca{animation:none} }

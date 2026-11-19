@@ -110,20 +110,20 @@ export async function crearEscaparate({ scene, camera, lienzo, datos, alActivar,
     }
     const o = objetoBajo(e);
     objetos.forEach(x => marcar(x, x === o));
-    lienzo.style.cursor = o ? 'grab' : '';
+    lienzo.style.cursor = o ? 'var(--cursor-dedo)' : '';
   });
   lienzo.addEventListener('pointerdown', e => {
     if(bloqueado) return;
     const o = objetoBajo(e); if(!o) return;
     arrastre = { obj:o, x:e.clientX, y:e.clientY, x0:e.clientX, y0:e.clientY, movido:0 };
     lienzo.setPointerCapture(e.pointerId);
-    lienzo.style.cursor = 'grabbing';
+    lienzo.style.cursor = 'var(--cursor-mano)';
     marcar(o, true);
   });
   const soltar = e => {
     if(!arrastre) return;
     const { obj, movido } = arrastre; arrastre = null;
-    lienzo.style.cursor = 'grab';
+    lienzo.style.cursor = 'var(--cursor-dedo)';
     if(e.type === 'pointerup' && movido < 6) activar(obj);   // un toque sin arrastrar = abrir
     else if(e.pointerType !== 'mouse') marcar(obj, false);
   };

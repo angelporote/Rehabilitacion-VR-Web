@@ -46,3 +46,12 @@ button{font:inherit;color:inherit;cursor:pointer}
 .ghost svg{width:14px;height:14px}
 
 @media (prefers-reduced-motion:reduce){ .cta{transition:none} }
+
+/* Cursor con forma de mano VR (dibujos en img/cursor/). Mano abierta normalmente
+   y dedo índice sobre lo que se puede tocar. Si el navegador no los admite, usa los normales. */
+:root{
+  --cursor-mano:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"%3E%3Cg fill="%23D6E4F7" fill-opacity=".92" stroke="%2322304A" stroke-width="1.4" stroke-linejoin="round"%3E%3Crect x="2.6" y="14" width="4.2" height="10" rx="2.1" transform="rotate%28-38 4.7 19%29"/%3E%3Crect x="8.6" y="4.5" width="4.2" height="14" rx="2.1"/%3E%3Crect x="13" y="2.5" width="4.2" height="15" rx="2.1"/%3E%3Crect x="17.4" y="4" width="4.2" height="14" rx="2.1"/%3E%3Crect x="21.6" y="7.5" width="3.8" height="11" rx="1.9"/%3E%3Crect x="8.2" y="13" width="17.4" height="16" rx="6.5"/%3E%3C/g%3E%3Ccircle cx="15.1" cy="4.6" r="1.4" fill="%235FF2D2"/%3E%3C/svg%3E') 15 6, auto;
+  --cursor-dedo:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"%3E%3Cg fill="%23D6E4F7" fill-opacity=".95" stroke="%2322304A" stroke-width="1.4" stroke-linejoin="round"%3E%3Crect x="3.6" y="15.5" width="4.2" height="9.5" rx="2.1" transform="rotate%28-40 5.7 20%29"/%3E%3Crect x="9.8" y="1" width="4.4" height="18" rx="2.2"/%3E%3Crect x="14.2" y="12" width="4.2" height="8" rx="2.1"/%3E%3Crect x="18.4" y="12.6" width="4.2" height="7.6" rx="2.1"/%3E%3Crect x="22.4" y="13.6" width="3.8" height="6.8" rx="1.9"/%3E%3Crect x="9.2" y="15" width="17" height="15" rx="6.5"/%3E%3C/g%3E%3Ccircle cx="12" cy="2.6" r="1.6" fill="%235FF2D2"/%3E%3C/svg%3E') 12 1, pointer;
+}
+html,body{cursor:var(--cursor-mano)}
+a,button,.label,[role=button]{cursor:var(--cursor-dedo)}

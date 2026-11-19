@@ -4,7 +4,7 @@
 
 **Web:** https://angelporote.github.io/Rehabilitacion-VR-Web/
 
-La portada es un salón de casa al atardecer con unas **gafas de realidad virtual** sobre una mesita. Las gafas flotan y se pueden girar con el ratón o el dedo. Al tocarlas, la cámara entra por las lentes y se abre la página del proyecto **RehabilitaciónVR** (`vr/`): juegos de rehabilitación para las gafas Pico 4 Ultra que se controlan solo con las manos.
+La portada es un salón de casa al atardecer con unas **gafas de realidad virtual** sobre una mesita. Las gafas flotan y se pueden girar con el ratón o el dedo. Al tocarlas, la cámara entra por las lentes y apareces en el **Lobby** de RehabilitaciónVR (`vr/`), la habitación desde la que se eligen los juegos en las gafas Pico 4 Ultra. Primero ves la pantalla "Elige un juego"; con el botón **Muévete libremente por la lobby** la web se convierte en un videojuego en primera persona (WASD o flechas y ratón, con colisiones), y **R** te devuelve a la pantalla. El cursor es una mano VR.
 
 Está hecha con HTML, CSS y JavaScript sin compilar: los modelos 3D se construyen con código en Three.js y los textos están separados en archivos JSON.
 
@@ -12,17 +12,21 @@ Está hecha con HTML, CSS y JavaScript sin compilar: los modelos 3D se construye
 
 ```
 index.html              portada: el salón con las gafas en 3D
-vr/index.html           página del proyecto RehabilitaciónVR
+vr/index.html           el Lobby en 3D (pantalla y modo libre en primera persona)
+vr/info.html            la información del proyecto en texto, sin 3D
 css/base.css            colores, tipografía y botones comunes
 css/portada.css         aspecto de la portada
-css/vr.css              aspecto de las páginas de proyecto
+css/lobby.css           aspecto del Lobby (botones, indicador, mano, ficha)
+css/vr.css              aspecto de la versión en texto
 js/nucleo/              lo compartido: motor gráfico, utilidades 3D y carga de datos
 js/modelos/             un archivo por modelo 3D (hoy: gafas.js) y su catálogo (index.js)
 js/portada/             escena, salón, escaparate (objetos e interacción) y arranque de la portada
-js/vr/main.js           pinta la página del proyecto VR desde su JSON
+js/lobby/                el Lobby: habitación, pantalla, jugador en primera persona y arranque
+js/vr/main.js           pinta la versión en texto desde datos/vr.json
 datos/escaparate.json   qué objetos salen en la portada y adónde lleva cada uno
-datos/vr.json           textos de la página del proyecto VR (juegos, informe, estado)
+datos/vr.json           los juegos (tarjetas del Lobby) y los textos del proyecto
 img/vr/                 capturas tomadas dentro de las gafas
+img/cursor/             la mano VR que hace de cursor
 docs/                   documentación y bitácora
 ```
 

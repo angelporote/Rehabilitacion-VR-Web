@@ -17,7 +17,9 @@ js/portada/main.js ──> js/portada/escena.js ──> js/portada/sala.js ─�
                    ──> js/portada/escaparate.js ──> js/modelos/index.js ──> js/modelos/*.js ──> js/nucleo/util.js
                    ──> js/nucleo/motor.js
                    ──> js/nucleo/datos.js
-js/vr/main.js ─────> js/nucleo/datos.js        (sin 3D: no carga Three.js)
+js/lobby/main.js ──> js/lobby/sala.js, js/lobby/pantalla.js, js/lobby/jugador.js ──> js/nucleo/util.js
+                 ──> js/nucleo/motor.js, js/nucleo/datos.js
+js/vr/main.js ─────> js/nucleo/datos.js        (versión en texto, sin 3D: no carga Three.js)
 ```
 
 ## Qué hace cada archivo
@@ -46,9 +48,29 @@ js/vr/main.js ─────> js/nucleo/datos.js        (sin 3D: no carga Three
 | `escaparate.js` | Lee `datos/escaparate.json`, carga los modelos, los coloca, los gira al arrastrarlos y los activa al tocarlos. Crea una etiqueta HTML por objeto (también sirve para teclado). |
 | `main.js` | Arranca todo y decide qué pasa al activar un objeto: `entrar` (viaje de cámara y cambio de página) o `ficha` (tarjeta con enlace). |
 
-### Página VR (`vr/`)
+### Lobby (`vr/index.html` + `js/lobby/`)
 
-`vr/index.html` tiene la cabecera fija y los huecos de cada sección. `js/vr/main.js` los rellena con `datos/vr.json`.
+Es lo que se ve al entrar en las gafas. Tiene dos modos (atributo `data-modo` del `<body>`):
+
+- **pantalla**: vista sentada frente al monitor "Elige un juego". Al tocar una tarjeta se abre la ficha del juego (provisional).
+- **libre**: primera persona. Se entra con el botón "Muévete libremente por la lobby", que captura el ratón (pointer lock). WASD o flechas para caminar, ratón para mirar, clic para tocar la pantalla (hay que estar a menos de 3,5 m), **R** para volver a la pantalla, Esc para soltar el ratón. Si el navegador no deja capturar el ratón, se mira arrastrando.
+
+| Archivo | Qué hace |
+|---|---|
+| `main.js` | Escena, cambio entre modos con animación de cámara, tocar tarjetas, ficha, tecla R y el indicador de la esquina (modo, controles y plano con tu posición). |
+| `sala.js` | La habitación: paredes, suelo de baldosas, mesa, silla, ventana, puerta, estantería, planta y cuadro. Exporta `LIMITES` (paredes) y devuelve `obstaculos` (muebles) para las colisiones. |
+| `pantalla.js` | El monitor: dibuja "Elige un juego" en un canvas con una tarjeta por juego de `datos/vr.json` y dice qué tarjeta hay en un punto (`tarjetaEn`). Los dibujos de las portadas están en `ICONOS`. |
+| `jugador.js` | Caminar en primera persona con colisiones: no deja salir de `LIMITES` ni entrar en los obstáculos. |
+
+En pantallas táctiles sin ratón no se ofrece el modo libre.
+
+### Versión en texto (`vr/info.html`)
+
+La misma información sin 3D. `js/vr/main.js` rellena sus secciones con `datos/vr.json`. Cada juego tiene un ancla (`info.html#cocina`).
+
+### Cursor de mano VR
+
+Dos dibujos SVG en `img/cursor/` (`mano.svg` abierta y `dedo.svg` apuntando), incrustados en `css/base.css` como `--cursor-mano` y `--cursor-dedo`. En el modo libre, con el ratón capturado, la mano se dibuja en el centro de la pantalla.
 
 ## Accesibilidad y rendimiento
 

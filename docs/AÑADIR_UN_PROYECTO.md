@@ -37,13 +37,13 @@
 
 La portada reparte los objetos sola según cuántos haya.
 
-## Una página de proyecto nueva
+## Una página nueva
 
-Copia el patrón de `vr/`: una carpeta con su `index.html`, un `js/<proyecto>/main.js` que pinte su `datos/<proyecto>.json`, y reutiliza `css/base.css` y `css/vr.css`.
+Copia el patrón de `vr/info.html`: un HTML, un `js/<pagina>/main.js` que pinte su `datos/<pagina>.json`, y reutiliza `css/base.css` y `css/vr.css`.
 
-## Un juego nuevo en la página VR
+## Un juego nuevo en el Lobby
 
-Añade una entrada a `juegos` en `datos/vr.json` y su captura en `img/vr/` (960 × 540, JPG):
+Añade una entrada a `juegos` en `datos/vr.json` y su captura en `img/vr/` (960 × 540, JPG). Sale a la vez como tarjeta en la pantalla del Lobby y en la versión en texto. `icono` es uno de los dibujos de `ICONOS` en `js/lobby/pantalla.js` (`olla`, `cartas`, `bolas`); para uno nuevo, añade allí una función que lo dibuje:
 
 ```json
 {
@@ -53,12 +53,14 @@ Añade una entrada a `juegos` en `datos/vr.json` y su captura en `img/vr/` (960 
   "imagen": "../img/vr/nuevo.jpg",
   "texto": "Qué hace el paciente.",
   "trabaja": ["Función 1", "Función 2"],
-  "niveles": "Fácil y Difícil"
+  "niveles": "Fácil y Difícil",
+  "color": "#E8643C",
+  "icono": "olla"
 }
 ```
 
 ## Antes de subir cambios
 
-- Sirve la web en local (`python3 -m http.server`) y prueba la portada y la página VR, también con la ventana estrecha (móvil).
+- Sirve la web en local (`python3 -m http.server`) y prueba la portada, el Lobby (los dos modos) y la versión en texto, también con la ventana estrecha (móvil).
 - Comprueba que la consola del navegador no muestra errores.
 - Apunta lo que hiciste en `docs/BITACORA.md`.

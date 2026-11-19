@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RehabilitaciónVR · Información en texto</title>
+<meta name="description" content="RehabilitaciónVR: juegos de rehabilitación en realidad virtual para las gafas Pico 4 Ultra, con el paciente sentado y controlados solo con las manos.">
+<!-- Versión en texto del proyecto VR (sin 3D). El contenido de las secciones sale de datos/vr.json (lo pinta js/vr/main.js) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/vr.css">
+<script type="module" src="../js/vr/main.js"></script>
+</head>
+<body class="pagina">
+
+<header class="top">
+  <a class="ghost" href="./">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4L3 8l4 4"/></svg>
+    Volver al Lobby
+  </a>
+  <div class="pill">Prototipo en desarrollo</div>
+</header>
+
+<main>
+  <section class="cabecera">
+    <div class="cabecera-texto">
+      <small>Realidad virtual · Rehabilitación</small>
+      <h1>RehabilitaciónVR <span>Rehabilitar jugando, solo con las manos.</span></h1>
+      <p>Juegos de rehabilitación en realidad virtual para las gafas <strong>Pico 4 Ultra</strong>. El paciente juega sentado y sin mandos: las gafas siguen sus manos y cada partida deja un informe para el terapeuta.</p>
+      <ul class="chips" id="tecnologia" aria-label="Tecnología"></ul>
+    </div>
+    <figure class="marco">
+      <img src="../img/vr/lobby.jpg" alt="Lobby dentro de las gafas: un tablero para elegir el juego" width="960" height="540">
+      <figcaption>El Lobby: se elige el juego tocando su portada con el dedo.</figcaption>
+    </figure>
+  </section>
+
+  <section class="bloque" aria-labelledby="t-como">
+    <h2 id="t-como">Cómo se juega</h2>
+    <div class="rejilla tres" id="resumen"></div>
+  </section>
+
+  <section class="bloque" aria-labelledby="t-juegos">
+    <h2 id="t-juegos">Los juegos</h2>
+    <p class="intro">Cada juego trabaja funciones distintas y tiene varios niveles. Todos se eligen desde el mismo Lobby.</p>
+    <div class="juegos" id="juegos"></div>
+  </section>
+
+  <section class="bloque informe" aria-labelledby="t-informe">
+    <div>
+      <h2 id="t-informe">Informe para el terapeuta</h2>
+      <p id="informeTexto"></p>
+      <p class="aviso" id="privacidad"></p>
+    </div>
+    <ul class="lista" id="medidas"></ul>
+  </section>
+
+  <section class="bloque estado" aria-labelledby="t-estado">
+    <h2 id="t-estado">Estado del proyecto</h2>
+    <p id="estado"></p>
+  </section>
+</main>
+
+<footer class="pie">
+  <span>Ángel Portela Otero · Ingeniería Biomédica</span>
+  <a href="./">Volver al Lobby</a>
+</footer>
+
+</body>
+</html>

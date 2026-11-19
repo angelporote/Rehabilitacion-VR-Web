@@ -3,70 +3,71 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RehabilitaciónVR · El proyecto</title>
-<meta name="description" content="RehabilitaciónVR: juegos de rehabilitación en realidad virtual para las gafas Pico 4 Ultra, con el paciente sentado y controlados solo con las manos.">
-<!-- Página del proyecto VR. El contenido de las secciones sale de datos/vr.json (lo pinta js/vr/main.js) -->
+<title>RehabilitaciónVR · Lobby</title>
+<meta name="description" content="El Lobby de RehabilitaciónVR en 3D: elige un juego en la pantalla o muévete libremente por la habitación.">
+<!--
+  EL LOBBY (lo que se ve al entrar en las gafas)
+  - js/lobby/main.js      → modos "pantalla" y "libre", indicador y ficha de cada juego
+  - js/lobby/sala.js      → la habitación y sus obstáculos (colisiones)
+  - js/lobby/pantalla.js  → el monitor "Elige un juego" (sale de datos/vr.json)
+  - js/lobby/jugador.js   → caminar en primera persona con colisiones
+  - info.html             → la misma información en texto, sin 3D
+-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/base.css">
-<link rel="stylesheet" href="../css/vr.css">
-<script type="module" src="../js/vr/main.js"></script>
+<link rel="stylesheet" href="../css/lobby.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+<script type="module" src="../js/lobby/main.js"></script>
 </head>
-<body class="pagina">
+<body class="lobby" data-modo="pantalla">
 
-<header class="top">
-  <a class="ghost" href="../">
+<canvas id="scene" aria-label="El Lobby en 3D: una habitación con una mesa y la pantalla para elegir un juego"></canvas>
+<div class="loader" id="loader">Entrando en el Lobby…</div>
+
+<div class="lobby-ui">
+  <a class="ghost salir" href="../">
     <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 8H3M7 4L3 8l4 4"/></svg>
-    Volver a las gafas
+    Quitarse las gafas
   </a>
-  <div class="pill">Prototipo en desarrollo</div>
-</header>
 
-<main>
-  <section class="cabecera">
-    <div class="cabecera-texto">
-      <small>Realidad virtual · Rehabilitación</small>
-      <h1>RehabilitaciónVR <span>Rehabilitar jugando, solo con las manos.</span></h1>
-      <p>Juegos de rehabilitación en realidad virtual para las gafas <strong>Pico 4 Ultra</strong>. El paciente juega sentado y sin mandos: las gafas siguen sus manos y cada partida deja un informe para el terapeuta.</p>
-      <ul class="chips" id="tecnologia" aria-label="Tecnología"></ul>
-    </div>
-    <figure class="marco">
-      <img src="../img/vr/lobby.jpg" alt="Lobby dentro de las gafas: un tablero para elegir el juego" width="960" height="540">
-      <figcaption>El Lobby: se elige el juego tocando su portada con el dedo.</figcaption>
-    </figure>
-  </section>
+  <!-- Botón para "convertir la web en un videojuego" -->
+  <button class="libre" id="libre">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="5" r="2.2"/><path d="M12 8v6l-3 6M12 14l3 6M8 11h8"/></svg>
+    Muévete libremente por la lobby
+  </button>
+  <p class="solo-raton">Para moverte libremente necesitas teclado y ratón.</p>
 
-  <section class="bloque" aria-labelledby="t-como">
-    <h2 id="t-como">Cómo se juega</h2>
-    <div class="rejilla tres" id="resumen"></div>
-  </section>
+  <button class="ghost volver" id="volver"><kbd>R</kbd> Volver a la pantalla</button>
 
-  <section class="bloque" aria-labelledby="t-juegos">
-    <h2 id="t-juegos">Los juegos</h2>
-    <p class="intro">Cada juego trabaja funciones distintas y tiene varios niveles. Todos se eligen desde el mismo Lobby.</p>
-    <div class="juegos" id="juegos"></div>
-  </section>
+  <!-- Indicador: modo, controles y plano de la habitación -->
+  <aside class="indicador" aria-live="polite">
+    <b id="indModo">Modo pantalla</b>
+    <ul id="indAyuda"></ul>
+    <canvas id="plano" width="150" height="170" aria-hidden="true"></canvas>
+  </aside>
 
-  <section class="bloque informe" aria-labelledby="t-informe">
-    <div>
-      <h2 id="t-informe">Informe para el terapeuta</h2>
-      <p id="informeTexto"></p>
-      <p class="aviso" id="privacidad"></p>
-    </div>
-    <ul class="lista" id="medidas"></ul>
-  </section>
+  <a class="texto" href="info.html">Ver la información en texto</a>
+</div>
 
-  <section class="bloque estado" aria-labelledby="t-estado">
-    <h2 id="t-estado">Estado del proyecto</h2>
-    <p id="estado"></p>
-  </section>
-</main>
+<!-- Mano VR en el centro de la vista cuando el ratón está capturado -->
+<img class="mano" id="mano" src="../img/cursor/dedo.svg" alt="" aria-hidden="true">
+<div class="pausa">Haz clic para seguir moviéndote · <kbd>R</kbd> para volver a la pantalla</div>
 
-<footer class="pie">
-  <span>Ángel Portela Otero · Ingeniería Biomédica</span>
-  <a href="../">Volver a las gafas</a>
-</footer>
+<!-- Ficha de un juego (provisional) -->
+<aside class="ficha" id="ficha" aria-live="polite">
+  <button class="cerrar" id="fichaCerrar" aria-label="Cerrar ficha">
+    <svg width="12" height="12" viewBox="0 0 12 12" stroke="currentColor" stroke-width="1.8"><path d="M1 1l10 10M11 1L1 11"/></svg>
+  </button>
+  <div id="fichaCuerpo"></div>
+</aside>
 
 </body>
 </html>
