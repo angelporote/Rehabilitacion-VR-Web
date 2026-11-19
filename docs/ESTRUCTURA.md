@@ -70,7 +70,7 @@ La misma información sin 3D. `js/vr/main.js` rellena sus secciones con `datos/v
 
 ### Cursor de mano VR
 
-Dos dibujos SVG en `img/cursor/`, translúcidos como las manos de Unity y difuminados en la muñeca: `mano.svg` (dedos abiertos) y `dedo.svg` (índice estirado y el resto cerrados, sobre lo que se puede tocar). El punto activo es la punta del índice. Están, incrustados en `css/base.css` como `--cursor-mano` y `--cursor-dedo`. En el modo libre, con el ratón capturado, la mano se dibuja en el centro de la pantalla.
+Dos dibujos SVG en `img/cursor/`, translúcidos como las manos de Unity y difuminados en la muñeca: `mano.svg` (dedos abiertos) y `dedo.svg` (índice estirado y el resto cerrados, sobre lo que se puede tocar). El punto activo es la punta del índice. Están incrustados en `css/base.css` como `--cursor-mano` y `--cursor-dedo`. En el modo libre la mano se dibuja en el centro de la pantalla.
 
 ## Cinemáticas de ponerse y quitarse las gafas
 
