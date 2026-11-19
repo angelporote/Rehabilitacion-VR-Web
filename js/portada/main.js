@@ -41,7 +41,9 @@ function entrar(obj){
   obj.rot.x = 0; obj.rot.y = Math.round(obj.rot.y / (Math.PI*2)) * Math.PI*2;
   flashText.textContent = `Entrando en ${obj.datos.titulo}…`;
   const mirar = { x:0, y:0, z:0 };
-  const tl = gsap.timeline({ onComplete:() => { location.href = destino; } });
+  const ir = () => { location.href = destino; };
+  const tl = gsap.timeline({ onComplete:ir });
+  setTimeout(ir, 4000);   // por si el equipo va tan lento que la animación se alarga: entramos igualmente
   tl.to(hero, { autoAlpha:0, y:20, duration:0.4 }, 0)
     .to('#labels', { autoAlpha:0, duration:0.3 }, 0)
     .to(mirar, { x:p.x, y:p.y, z:p.z, duration:1.2, ease:'power2.inOut', onUpdate:() => camera.lookAt(mirar.x, mirar.y, mirar.z) }, 0.2)
