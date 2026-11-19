@@ -1,4 +1,4 @@
-# Añadir un proyecto o un juego
+# Añadir un juego o un objeto
 
 ## Un objeto nuevo en la portada
 

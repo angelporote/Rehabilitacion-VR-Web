@@ -1,29 +1,24 @@
 # Rehabilitación VR · Web
 
-*Una web en 3D para presentar mis proyectos de Ingeniería Biomédica.*
+*Una web en 3D para presentar RehabilitaciónVR, juegos de rehabilitación en realidad virtual.*
 
-**Web:** https://angelporote.github.io/Rehabilitacion-VR-Web/ (cuando GitHub Pages esté activado)
+**Web:** https://angelporote.github.io/Rehabilitacion-VR-Web/
 
-La portada muestra unos objetos 3D que se pueden girar con el ratón o el dedo. Cada objeto es la puerta a un proyecto:
+La portada es un salón de casa al atardecer con unas **gafas de realidad virtual** sobre una mesita. Las gafas flotan y se pueden girar con el ratón o el dedo. Al tocarlas, la cámara entra por las lentes y se abre la página del proyecto **RehabilitaciónVR** (`vr/`): juegos de rehabilitación para las gafas Pico 4 Ultra que se controlan solo con las manos.
 
-| Objeto | Proyecto | Qué pasa al tocarlo |
-|---|---|---|
-| Gafas de realidad virtual | **RehabilitaciónVR**: juegos de rehabilitación para las gafas Pico 4 Ultra, controlados solo con las manos | La cámara entra por las lentes y se abre la página del proyecto (`vr/`) |
-| Prótesis de cadera | **Dentro del implante**: web de biomateriales e implantología | Se abre una ficha con el enlace a esa web |
-
-Sigue el mismo enfoque que [Dentro del implante](https://github.com/angelporote/Dentro-del-Implante): HTML, CSS y JavaScript sin compilar, modelos hechos con código en Three.js y los textos separados en archivos JSON.
+Está hecha con HTML, CSS y JavaScript sin compilar: los modelos 3D se construyen con código en Three.js y los textos están separados en archivos JSON.
 
 ## Estructura
 
 ```
-index.html              portada: un objeto 3D por proyecto
+index.html              portada: el salón con las gafas en 3D
 vr/index.html           página del proyecto RehabilitaciónVR
 css/base.css            colores, tipografía y botones comunes
 css/portada.css         aspecto de la portada
 css/vr.css              aspecto de las páginas de proyecto
 js/nucleo/              lo compartido: motor gráfico, utilidades 3D y carga de datos
-js/modelos/             un archivo por modelo 3D (gafas.js, protesis.js) y su catálogo (index.js)
-js/portada/             escena, escaparate (objetos e interacción) y arranque de la portada
+js/modelos/             un archivo por modelo 3D (hoy: gafas.js) y su catálogo (index.js)
+js/portada/             escena, salón, escaparate (objetos e interacción) y arranque de la portada
 js/vr/main.js           pinta la página del proyecto VR desde su JSON
 datos/escaparate.json   qué objetos salen en la portada y adónde lleva cada uno
 datos/vr.json           textos de la página del proyecto VR (juegos, informe, estado)
@@ -38,7 +33,7 @@ Más detalle en [docs/ESTRUCTURA.md](docs/ESTRUCTURA.md).
 | Archivo | Para qué |
 |---|---|
 | [docs/ESTRUCTURA.md](docs/ESTRUCTURA.md) | Cómo está montada la web y qué hace cada archivo |
-| [docs/AÑADIR_UN_PROYECTO.md](docs/AÑADIR_UN_PROYECTO.md) | Añadir un objeto nuevo a la portada, o un juego a la página VR |
+| [docs/AÑADIR_UN_PROYECTO.md](docs/AÑADIR_UN_PROYECTO.md) | Añadir un juego a la página VR, o un objeto nuevo a la portada |
 | [docs/BITACORA.md](docs/BITACORA.md) | Diario del trabajo: qué se hizo, qué se decidió y qué falta |
 
 ## Probarla en local

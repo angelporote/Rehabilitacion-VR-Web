@@ -12,7 +12,7 @@ import { crearEscaparate } from './escaparate.js';
 
 const lienzo = document.getElementById('scene');
 const motor = crearMotor(lienzo);
-const { scene, camera, animarAmbiente } = crearEscena(motor.entorno);
+const { scene, camera, animarAmbiente, sala } = crearEscena(motor.entorno);
 const CAMARA_INICIO = camera.position.clone();
 
 const hero = document.getElementById('hero');
@@ -83,7 +83,7 @@ redimensionar();
 // Al volver con el botón "atrás" el navegador puede restaurar la página tal cual: la dejamos como al principio
 addEventListener('pageshow', e => {
   if(!e.persisted || !escaparate) return;
-  camera.position.copy(CAMARA_INICIO); camera.lookAt(0, 0, 0);
+  camera.position.copy(CAMARA_INICIO); camera.lookAt(0, 0, 0); camera.updateMatrixWorld();
   gsap.set([hero, '#labels'], { autoAlpha:1, y:0 }); gsap.set([flash, flashText], { autoAlpha:0 });
   escaparate.bloquear(false);
 });
@@ -101,8 +101,7 @@ function bucle(){
 (async () => {
   try{
     const datos = await cargarJSON('datos/escaparate.json');
-    escaparate = await crearEscaparate({ scene, camera, lienzo, datos, alActivar });
-    camera.lookAt(0, 0, 0);
+    escaparate = await crearEscaparate({ scene, camera, lienzo, datos, alActivar, alColocar:sala.colocarMesitas });
     motor.renderer.setAnimationLoop(bucle);
     document.getElementById('loader').classList.add('done');
     gsap.from(hero, { autoAlpha:0, y:24, duration:D(0.9), ease:'power3.out' });

@@ -7,13 +7,13 @@ La web son páginas estáticas: HTML, CSS y JavaScript en módulos, sin compilar
 1. **Contenido separado del código.** Los textos y enlaces viven en `datos/*.json`. Para cambiar un texto no hace falta tocar JavaScript.
 2. **Un modelo 3D por archivo.** Cada modelo está en `js/modelos/<nombre>.js` y exporta `crear()`. Ningún modelo conoce a los demás ni a la escena.
 3. **Lo común va en `js/nucleo/`.** Las páginas y los modelos lo usan; el núcleo no conoce ninguna página.
-4. **Una carpeta por página.** La portada es `index.html` + `js/portada/` + `css/portada.css`. Cada proyecto con página propia tiene su carpeta (`vr/`) y su JSON.
+4. **Una carpeta por página.** La portada es `index.html` + `js/portada/` + `css/portada.css`. Cada página de información tiene su carpeta (`vr/`) y su JSON.
 5. **Nada de tamaños fijos por modelo en la escena.** El escaparate centra y escala cada modelo solo, y los reparte según cuántos haya.
 
 ## Dependencias entre módulos
 
 ```
-js/portada/main.js ──> js/portada/escena.js ──> js/nucleo/util.js
+js/portada/main.js ──> js/portada/escena.js ──> js/portada/sala.js ──> js/nucleo/util.js
                    ──> js/portada/escaparate.js ──> js/modelos/index.js ──> js/modelos/*.js ──> js/nucleo/util.js
                    ──> js/nucleo/motor.js
                    ──> js/nucleo/datos.js
@@ -34,15 +34,15 @@ js/vr/main.js ─────> js/nucleo/datos.js        (sin 3D: no carga Three
 
 | Archivo | Qué hace |
 |---|---|
-| `index.js` | El catálogo: asocia cada nombre (`gafas`, `protesis`) con su archivo. Se cargan bajo demanda. |
+| `index.js` | El catálogo: asocia cada nombre (hoy solo `gafas`) con su archivo. Se cargan bajo demanda. |
 | `gafas.js` | Gafas de realidad virtual: visor, frontal con cámaras y franja luminosa, almohadilla, lentes, cinta y contrapeso. Marca un punto `entrada` entre las lentes, adonde viaja la cámara. |
-| `protesis.js` | Prótesis total de cadera, el mismo modelo que la portada de Dentro del implante. Sus texturas se generan después del primer fotograma (`detalle`). |
 
 ### Portada (`js/portada/`)
 
 | Archivo | Qué hace |
 |---|---|
-| `escena.js` | Escena, cámara, fondo degradado, luces y polvo luminoso. |
+| `escena.js` | Escena, cámara, luces cálidas y motas de polvo. Monta el salón. |
+| `sala.js` | El salón de casa hecho con código: tarima, paredes, ventana al atardecer con cortinas, sofá, lámpara, planta, cuadros, alfombra y una mesita bajo cada objeto (`colocarMesitas`). |
 | `escaparate.js` | Lee `datos/escaparate.json`, carga los modelos, los coloca, los gira al arrastrarlos y los activa al tocarlos. Crea una etiqueta HTML por objeto (también sirve para teclado). |
 | `main.js` | Arranca todo y decide qué pasa al activar un objeto: `entrar` (viaje de cámara y cambio de página) o `ficha` (tarjeta con enlace). |
 

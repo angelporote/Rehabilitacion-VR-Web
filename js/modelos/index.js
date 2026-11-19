@@ -6,6 +6,5 @@
    Para añadir un modelo: crea js/modelos/<nombre>.js y añádelo aquí.
    ========================================================= */
 export const MODELOS = {
-  gafas:    () => import('./gafas.js'),
-  protesis: () => import('./protesis.js')
+  gafas: () => import('./gafas.js')
 };
