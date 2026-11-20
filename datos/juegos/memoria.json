@@ -1,0 +1,201 @@
+{
+  "_ayuda": "Contenido de la sala de Memoria (vr/juego.html?id=memoria). Igual que datos/juegos/bingo.json: un panel por objeto que se toca (los dos plátanos de js/juegos/memoria/escena.js). Textos sacados del código del juego en Unity (MemoryGame.cs, MemoryDefinition.cs) y de la guía de medición; pendientes de revisar por Ángel.",
+  "id": "memoria",
+  "nombre": "Memoria de cartas",
+  "lema": "Encuentra las parejas",
+  "color": "#2BA3B0",
+  "cinematica": "Dos cartas se dan la vuelta: ¡pareja de plátanos!",
+  "paneles": {
+    "carta-izquierda": {
+      "etiqueta": "Cómo se juega",
+      "titulo": "Cómo se juega a Memoria",
+      "intro": "Un tablero de cartas boca abajo, inclinado sobre la mesa a medio metro de los ojos. Se dan la vuelta de dos en dos tocándolas con la punta del dedo, y hay que encontrar todas las parejas.",
+      "secciones": [
+        {
+          "titulo": "1. Elige el nivel",
+          "texto": "Tres tableros. Todos tienen un número par de cartas y cada dibujo sale dos veces.",
+          "tabla": [
+            [
+              "Nivel",
+              "Tablero",
+              "Parejas"
+            ],
+            [
+              "Fácil",
+              "3 × 2",
+              "3"
+            ],
+            [
+              "Normal",
+              "4 × 3",
+              "6"
+            ],
+            [
+              "Difícil",
+              "6 × 3",
+              "9"
+            ]
+          ],
+          "imagen": "../img/vr/memoria/01-niveles.jpg",
+          "pie": "«Da la vuelta a las cartas de dos en dos y encuentra todas las parejas»."
+        },
+        {
+          "titulo": "2. Las cartas, boca abajo",
+          "texto": "Las cartas se reparten al azar en cada partida. Arriba están el marcador (parejas e intentos) y los botones para cambiar de nivel o reiniciar.",
+          "imagen": "../img/vr/memoria/02-facil-inicio.jpg",
+          "pie": "Fácil: 6 cartas, 3 parejas."
+        },
+        {
+          "titulo": "3. Toca una carta",
+          "texto": "Se toca con la punta del índice, como un botón. La carta se levanta un poco y gira para enseñar su dibujo. El reloj empieza con la primera carta.",
+          "imagen": "../img/vr/memoria/05-normal-inicio.jpg",
+          "pie": "Normal: 12 cartas a la distancia del brazo."
+        },
+        {
+          "titulo": "4. Si no son pareja",
+          "texto": "Se quedan a la vista 1,4 segundos, el tiempo justo para memorizarlas, y vuelven a ponerse boca abajo. Cuenta como un intento. No hay castigo: solo información.",
+          "imagen": "../img/vr/memoria/03-no-son-pareja.jpg",
+          "pie": "Una manzana y una estrella: se vuelven a tapar."
+        },
+        {
+          "titulo": "5. Si son pareja",
+          "texto": "Las dos se quedan boca arriba con el borde en verde y ya no se pueden tocar. El marcador suma una pareja.",
+          "imagen": "../img/vr/memoria/04-pareja.jpg",
+          "pie": "Pareja de manzanas: borde verde."
+        },
+        {
+          "titulo": "6. Más cartas, más memoria",
+          "texto": "En Difícil hay 18 cartas: hay que recordar dónde estaba cada dibujo que ya ha salido.",
+          "imagen": "../img/vr/memoria/07-dificil-mitad.jpg",
+          "pie": "Difícil a media partida: 5 de 9 parejas."
+        },
+        {
+          "titulo": "7. ¡Tablero completado!",
+          "texto": "Al encontrar la última pareja, todas las cartas se celebran y la pantalla dice «¡Has completado el tablero! ¡Enhorabuena!», con las parejas, los intentos y el tiempo. Se puede jugar otra vez, cambiar de nivel o volver a los juegos.",
+          "imagen": "../img/vr/memoria/09-final.jpg",
+          "pie": "9 parejas en 9 intentos, en 5 segundos (partida simulada)."
+        },
+        {
+          "titulo": "Qué trabaja",
+          "lista": [
+            "Memoria visual a corto plazo: recordar dónde estaba cada dibujo.",
+            "Atención: fijarse en cada carta que se destapa.",
+            "Alcance y precisión del brazo: tocar cartas de 16 cm repartidas por un tablero de 90 cm."
+          ],
+          "imagen": "../img/vr/memoria/08-completado.jpg",
+          "pie": "Fácil completado: las 3 parejas en verde."
+        }
+      ]
+    },
+    "carta-derecha": {
+      "etiqueta": "Cómo se guardan los datos",
+      "titulo": "Qué se guarda de cada partida",
+      "intro": "Cada partida de Memoria deja un informe para el terapeuta. Los números de esta página son un ejemplo: nunca se muestran datos de pacientes reales.",
+      "secciones": [
+        {
+          "titulo": "Un archivo por partida",
+          "texto": "Al completar el tablero, las gafas guardan un archivo con el juego, el nivel, la duración (desde la primera carta) y una frase de resumen: «6 parejas en 10 intentos (4 fallos)».",
+          "vista": "json"
+        },
+        {
+          "titulo": "Las medidas comunes",
+          "texto": "Las mismas en todos los juegos, para poder compararlos. En Memoria, un acierto es una pareja encontrada y un error es un intento que no era pareja.",
+          "vista": "comunes"
+        },
+        {
+          "titulo": "Las medidas propias de Memoria",
+          "texto": "Hoy el juego guarda parejas, intentos y fallos. El hilo de datos ha pedido añadir el tiempo de reacción (de destapar una carta a destapar la segunda) y guardar también las partidas que se dejan a medias.",
+          "vista": "propias"
+        },
+        {
+          "titulo": "Cómo se evalúa",
+          "texto": "Al guardar se calculan la precisión y los aciertos por minuto. Las tendencias se miran dentro del mismo juego y nivel, y con al menos 3 sesiones. Se mide, no se castiga: el paciente nunca ve «errores».",
+          "vista": "evolucion"
+        },
+        {
+          "titulo": "Dónde quedan",
+          "texto": "Del PC del centro no sale nada. Los archivos se copian de las gafas a una carpeta del PC. Allí se rehacen dos tablas que se abren con Excel y un informe por paciente con gráficas, que funciona sin internet.",
+          "vista": "flujo"
+        },
+        {
+          "titulo": "Privacidad",
+          "texto": "Son datos de salud. Solo se guarda un código de paciente (de P-000 a P-999), que el terapeuta mete con un teclado numérico en el Lobby. Nunca el nombre, la fecha de nacimiento ni nada que lo identifique.",
+          "vista": "privacidad"
+        }
+      ],
+      "ejemplo": {
+        "formatVersion": 2,
+        "patient": "P-000",
+        "game": "Memoria",
+        "level": "Normal",
+        "levelIndex": 1,
+        "durationSeconds": 95,
+        "completed": true,
+        "endReason": "completada",
+        "summary": "6 parejas en 10 intentos (4 fallos)",
+        "comunes": [
+          [
+            "aciertos",
+            6,
+            "",
+            "Parejas encontradas"
+          ],
+          [
+            "errores",
+            4,
+            "",
+            "Intentos que no eran pareja"
+          ]
+        ],
+        "derivadas": [
+          [
+            "precision",
+            60,
+            "%",
+            "aciertos / (aciertos + errores)"
+          ],
+          [
+            "aciertos_por_minuto",
+            3.79,
+            "/min",
+            "aciertos / minutos de juego"
+          ]
+        ],
+        "propias": [
+          [
+            "parejas",
+            6,
+            "",
+            "Parejas del tablero"
+          ],
+          [
+            "intentos",
+            10,
+            "",
+            "Veces que destapó dos cartas"
+          ],
+          [
+            "fallos",
+            4,
+            "",
+            "Intentos sin pareja"
+          ],
+          [
+            "tiempo_reaccion_medio",
+            "—",
+            "s",
+            "Pedida por el hilo de datos: aún no se guarda"
+          ]
+        ],
+        "pasos": [],
+        "evolucion": [
+          45,
+          50,
+          55,
+          50,
+          60
+        ]
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@
    vr/main.js · Pinta la página del proyecto VR a partir de datos/vr.json
    Para cambiar textos o añadir un juego basta con editar el JSON.
    ========================================================= */
-import { cargarJSON, esc } from '../nucleo/datos.js?v=202611192241';
+import { cargarJSON, esc } from '../nucleo/datos.js?v=202611201014';
 
 const $ = id => document.getElementById(id);
 

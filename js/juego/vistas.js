@@ -4,7 +4,7 @@
    nunca de pacientes) y devuelve HTML. Se animan con la clase .activa.
    Para añadir una vista: una función más en VISTAS con su nombre.
    ========================================================= */
-import { esc } from '../nucleo/datos.js?v=202611192241';
+import { esc } from '../nucleo/datos.js?v=202611201014';
 
 const num = v => typeof v === 'number' ? v.toLocaleString('es-ES') : esc(v);
 const etiquetaEjemplo = '<span class="ejemplo">Datos de ejemplo</span>';
@@ -27,11 +27,15 @@ export const VISTAS = {
     k('level', s(e.level)); k('levelIndex', n(e.levelIndex)); k('durationSeconds', n(e.durationSeconds));
     k('completed', n(e.completed)); k('endReason', s(e.endReason)); k('summary', s(e.summary));
     L.push('  <b class="j-k">"metrics"</b>: {');
-    [...e.comunes, ...e.derivadas].slice(0, 6).forEach(([nom, v]) => L.push(`    <b class="j-k">"${nom}"</b>: ${n(v)},`));
+    [...e.comunes, ...e.derivadas, ...e.propias.filter(([, v]) => typeof v === 'number')].slice(0, 7).forEach(([nom, v]) => L.push(`    <b class="j-k">"${nom}"</b>: ${n(v)},`));
     L.push('    <b class="j-c">…</b>'); L.push('  },');
-    L.push('  <b class="j-k">"steps"</b>: [');
-    e.pasos.slice(0, 2).forEach(([nom, lat, dur, err]) => L.push(`    { <b class="j-k">"name"</b>: ${s(nom)}, <b class="j-k">"latencySeconds"</b>: ${n(lat)}, <b class="j-k">"durationSeconds"</b>: ${n(dur)}, <b class="j-k">"errors"</b>: ${n(err)} },`));
-    L.push('    <b class="j-c">…</b>'); L.push('  ]'); L.push('}');
+    const pasos = e.pasos || [];
+    if(pasos.length){
+      L.push('  <b class="j-k">"steps"</b>: [');
+      pasos.slice(0, 2).forEach(([nom, lat, dur, err]) => L.push(`    { <b class="j-k">"name"</b>: ${s(nom)}, <b class="j-k">"latencySeconds"</b>: ${n(lat)}, <b class="j-k">"durationSeconds"</b>: ${n(dur)}, <b class="j-k">"errors"</b>: ${n(err)} },`));
+      L.push('    <b class="j-c">…</b>'); L.push('  ]');
+    } else L.push('  <b class="j-k">"steps"</b>: []');
+    L.push('}');
     return `${etiquetaEjemplo}<div class="vista"><h4>Archivo de una partida (.json)</h4><pre>${L.map((l, i) => `<span style="transition-delay:${i*35}ms">${l}</span>`).join('')}</pre></div>`;
   },
 

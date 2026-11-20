@@ -5,9 +5,9 @@
    - Se pueden girar arrastrando y se activan con un clic o con su etiqueta
    ========================================================= */
 import * as THREE from 'three';
-import { MODELOS } from '../modelos/index.js?v=202611192241';
-import { gsap, reduceMotion, isMobile, D } from '../nucleo/util.js?v=202611192241';
-import { esc } from '../nucleo/datos.js?v=202611192241';
+import { MODELOS } from '../modelos/index.js?v=202611201014';
+import { gsap, reduceMotion, isMobile, D } from '../nucleo/util.js?v=202611201014';
+import { esc } from '../nucleo/datos.js?v=202611201014';
 
 const RADIO_BASE = 1.9;   // tamaño (radio de la esfera envolvente) al que se ajusta cada modelo
 

@@ -70,9 +70,9 @@ En pantallas táctiles sin ratón no se ofrece el modo libre.
 
 ### Sala de un juego (`vr/juego.html?id=<juego>` + `js/juego/` + `js/juegos/<id>/`)
 
-La sala 3D de cada juego, hoy la del **Bingo**, copiada de su escena de Unity (mismas medidas). Se entra desde su tarjeta del Lobby con un fundido a negro. Modos (`data-modo` del `<body>`):
+La sala 3D de cada juego, hoy las del **Bingo** y **Memoria**, copiadas de sus escenas de Unity (mismas medidas). La habitación, la mesa y la silla son comunes (`js/juegos/comun/sala.js`, como `GameRoomBuilder` en Unity). Se entra desde su tarjeta del Lobby con un fundido a negro. Modos (`data-modo` del `<body>`):
 
-- **cine**: cinemática con la mirada fija, sentado a la mesa. En el Bingo, el bombo acelera, suelta la bola 18, la cámara la sigue por la rampa hasta la bandeja y se abre a la mesa entera. `Enter` (o clic) la salta y `Esc` vuelve al Lobby.
+- **cine**: cinemática con la mirada fija, sentado a la mesa. En el Bingo, el bombo acelera, suelta la bola 18, la cámara la sigue por la rampa hasta la bandeja y se abre a la mesa entera. En Memoria, la mirada va a una carta, se da la vuelta (un plátano), luego a otra (otro plátano) y las dos quedan en verde: pareja. `Enter` (o clic) la salta y `Esc` vuelve al Lobby.
 - **mesa**: sentado. Cada objeto que se toca lleva una etiqueta encima (también es su botón de teclado). `L` pasa a moverse libremente.
 - **libre**: primera persona como en el Lobby; se toca lo que hay en el centro de la vista a menos de 2,5 m. `R` vuelve a la mesa.
 - **panel**: el objeto se acerca a la cámara y se abre su panel (90 % de la pantalla): el texto baja a la izquierda por secciones y la derecha muestra la captura o el dibujo de la sección que se lee. El **cartón** se despliega como un papel ("Cómo se juega", con capturas de Unity) y la **bola** se abre en círculo ("Cómo se guardan los datos", con datos de ejemplo).
@@ -83,8 +83,10 @@ La sala 3D de cada juego, hoy la del **Bingo**, copiada de su escena de Unity (m
 | `js/juego/panel.js` | El panel grande: monta las secciones, marca la que se lee (al bajar con rueda o con `↑↓`) y lo abre "desplegando" o "acercando". |
 | `js/juego/vistas.js` | Los dibujos de la derecha que no son capturas (archivo `.json`, medidas, barras por número, evolución, de las gafas al PC, privacidad). |
 | `js/juegos/index.js` | Catálogo de salas (se cargan bajo demanda). |
+| `js/juegos/comun/sala.js` | La habitación común: suelo, paredes, ventana, planta, mesa, silla y letrero con el nombre del juego. |
+| `js/juegos/memoria/escena.js` | La sala de Memoria: tablero inclinado con marcador, 12 cartas (nivel Normal) con las texturas de Unity y dos plátanos; la cinemática de la pareja. Plátano izquierdo = cómo se juega, derecho = datos. |
 | `js/juegos/bingo/escena.js` | La sala del Bingo: habitación, mesa, máquina con bombo que gira, rampa, bandeja, descarte, cesta, cartón, monitor y la bola; su cinemática y sus objetos que se tocan. |
-| `datos/juegos/bingo.json` | Los textos de los dos paneles y los datos de ejemplo. |
+| `datos/juegos/<id>.json` | Los textos de los dos paneles y los datos de ejemplo de cada juego. |
 
 ### Versión en texto (`vr/info.html`)
 

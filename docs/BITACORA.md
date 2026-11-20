@@ -4,6 +4,21 @@ Diario del trabajo en la web: qué se hizo, qué se decidió (y por qué) y qué
 
 ---
 
+## 20/11/2026 · La sala de Memoria
+
+**Hecho**
+- La tarjeta de **Memoria** del Lobby entra en su sala (`vr/juego.html?id=memoria`): el tablero inclinado de Unity con su marcador y 12 cartas boca abajo (nivel Normal), con las mismas texturas de dorso y dibujos.
+- **Cinemática**: la mirada va a una carta y se da la vuelta (un plátano), luego a otra (otro plátano) y las dos quedan con el borde verde: pareja. El marcador pasa a «Parejas 1/6 · Intentos 1».
+- Los dos plátanos son lo que se toca: el de la **izquierda** explica cómo se juega (8 pasos con capturas de Unity) y el de la **derecha** cómo se guardan los datos (datos de ejemplo).
+- La habitación, la mesa y la silla pasan a `js/juegos/comun/sala.js`, compartidas por todas las salas.
+- Al abrir un objeto, ahora puede estar dentro de otro (las cartas están dentro del tablero) y siempre se pone de cara a la cámara.
+
+**Decidido**
+- En Unity no hay carta de plátano: se ha dibujado una nueva (`img/vr/memoria/cartas/cara-platano.png`) con el mismo estilo que las demás. Si se quiere en el juego, habría que añadirla en `MemoryAssets.cs`.
+- Memoria hoy guarda parejas, intentos y fallos. Las medidas comunes (aciertos = parejas, errores = fallos) y el tiempo de reacción son lo que pide la guía de datos; se explica como pendiente.
+
+---
+
 ## 19/11/2026 · Que el navegador coja siempre la versión nueva
 
 **Hecho**

@@ -2,8 +2,8 @@
    escena.js · Escena 3D de la portada: cámara, luces y el salón de casa
    ========================================================= */
 import * as THREE from 'three';
-import { gamaBaja } from '../nucleo/util.js?v=202611192241';
-import { crearSala } from './sala.js?v=202611192241';
+import { gamaBaja } from '../nucleo/util.js?v=202611201014';
+import { crearSala } from './sala.js?v=202611201014';
 
 export function crearEscena(entorno){
   const scene = new THREE.Scene();

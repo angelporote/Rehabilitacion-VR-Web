@@ -7,13 +7,13 @@
    el modo, los controles y un plano con la posición.
    ========================================================= */
 import * as THREE from 'three';
-import { crearMotor } from '../nucleo/motor.js?v=202611192241';
-import { gsap, D, reduceMotion } from '../nucleo/util.js?v=202611192241';
-import { cargarJSON, esc } from '../nucleo/datos.js?v=202611192241';
-import { crearSala, LIMITES, MESA } from './sala.js?v=202611192241';
-import { crearPantalla } from './pantalla.js?v=202611192241';
-import { crearJugador } from '../nucleo/jugador.js?v=202611192241';
-import { crearPlano } from '../nucleo/plano.js?v=202611192241';
+import { crearMotor } from '../nucleo/motor.js?v=202611201014';
+import { gsap, D, reduceMotion } from '../nucleo/util.js?v=202611201014';
+import { cargarJSON, esc } from '../nucleo/datos.js?v=202611201014';
+import { crearSala, LIMITES, MESA } from './sala.js?v=202611201014';
+import { crearPantalla } from './pantalla.js?v=202611201014';
+import { crearJugador } from '../nucleo/jugador.js?v=202611201014';
+import { crearPlano } from '../nucleo/plano.js?v=202611201014';
 
 const $ = id => document.getElementById(id);
 const lienzo = $('scene');

@@ -10,13 +10,13 @@
    - "panel": un objeto se ha acercado y su panel está abierto
    ========================================================= */
 import * as THREE from 'three';
-import { crearMotor } from '../nucleo/motor.js?v=202611192241';
-import { gsap, D, reduceMotion } from '../nucleo/util.js?v=202611192241';
-import { cargarJSON, esc } from '../nucleo/datos.js?v=202611192241';
-import { crearJugador } from '../nucleo/jugador.js?v=202611192241';
-import { crearPlano } from '../nucleo/plano.js?v=202611192241';
-import { SALAS } from '../juegos/index.js?v=202611192241';
-import { crearPanel } from './panel.js?v=202611192241';
+import { crearMotor } from '../nucleo/motor.js?v=202611201014';
+import { gsap, D, reduceMotion } from '../nucleo/util.js?v=202611201014';
+import { cargarJSON, esc } from '../nucleo/datos.js?v=202611201014';
+import { crearJugador } from '../nucleo/jugador.js?v=202611201014';
+import { crearPlano } from '../nucleo/plano.js?v=202611201014';
+import { SALAS } from '../juegos/index.js?v=202611201014';
+import { crearPanel } from './panel.js?v=202611201014';
 
 const $ = id => document.getElementById(id);
 const lienzo = $('scene'), cuerpo = document.body, html = document.documentElement;
@@ -134,7 +134,10 @@ async function abrir(t){
   const desde = modo;
   focoAntes = desde === 'mesa' ? document.activeElement : null;
   jugador.activar(false); soltarRaton(); resaltar(-1);
-  abiertoT = t; guardado = { desde, pos:t.objeto.position.clone(), quat:t.objeto.quaternion.clone() };
+  // El objeto pasa a colgar de la escena (mismo sitio en el mundo) para moverlo hasta la cámara; al cerrar vuelve a su sitio
+  abiertoT = t; guardado = { desde, padre:t.objeto.parent, pos:t.objeto.position.clone(), quat:t.objeto.quaternion.clone() };
+  scene.attach(t.objeto);
+  guardado.posMundo = t.objeto.position.clone(); guardado.quatMundo = t.objeto.quaternion.clone();
   ponerModo('panel');
   // Delante de los ojos: el cartón ocupa medio ancho; la bola, un tercio del alto
   const dir = new THREE.Vector3(); camera.getWorldDirection(dir);
@@ -148,8 +151,7 @@ async function abrir(t){
       const tl = gsap.timeline({ onComplete:res });
       tl.to(t.objeto.position, { x:destino.x, y:destino.y, z:destino.z, duration:0.9, ease:'power2.inOut' }, 0);
       const q0 = t.objeto.quaternion.clone(), k = { v:0 };
-      if(t.estilo !== 'acercar') tl.to(k, { v:1, duration:0.9, ease:'power2.inOut', onUpdate:() => t.objeto.quaternion.slerpQuaternions(q0, q, k.v) }, 0);
-      else tl.to(t.objeto.rotation, { y:'+=' + Math.PI*2, duration:0.9, ease:'power2.inOut' }, 0);
+      tl.to(k, { v:1, duration:0.9, ease:'power2.inOut', onUpdate:() => t.objeto.quaternion.slerpQuaternions(q0, q, k.v) }, 0);   // de cara a la cámara
     });
   }
   await panel.abrir(p, p.ejemplo, t.estilo);
@@ -161,15 +163,15 @@ async function cerrar(){
   await panel.cerrar();
   const g = guardado;
   const fin = () => {
-    t.objeto.position.copy(g.pos); t.objeto.quaternion.copy(g.quat); abiertoT = null;
+    g.padre.add(t.objeto); t.objeto.position.copy(g.pos); t.objeto.quaternion.copy(g.quat); abiertoT = null;
     if(g.desde === 'libre'){ ponerModo('libre'); jugador.activar(true); pedirRaton(); }
     else { ponerModo('mesa'); (focoAntes && document.contains(focoAntes) ? focoAntes : botones[0])?.focus({ preventScroll:true }); }
   };
   if(reduceMotion){ fin(); return; }
   const q0 = t.objeto.quaternion.clone(), k = { v:0 };
   gsap.timeline({ onComplete:fin })
-    .to(t.objeto.position, { x:g.pos.x, y:g.pos.y, z:g.pos.z, duration:0.8, ease:'power2.inOut' }, 0)
-    .to(k, { v:1, duration:0.8, ease:'power2.inOut', onUpdate:() => t.objeto.quaternion.slerpQuaternions(q0, g.quat, k.v) }, 0);
+    .to(t.objeto.position, { x:g.posMundo.x, y:g.posMundo.y, z:g.posMundo.z, duration:0.8, ease:'power2.inOut' }, 0)
+    .to(k, { v:1, duration:0.8, ease:'power2.inOut', onUpdate:() => t.objeto.quaternion.slerpQuaternions(q0, g.quatMundo, k.v) }, 0);
 }
 $('panelCerrar').addEventListener('click', cerrar);
 
@@ -285,7 +287,7 @@ function volverLobby(){
 function pintarIndicador(){
   const ayuda = {
     cine:  ['Cinemática', '<li><kbd>Enter</kbd> saltar</li><li><kbd>Esc</kbd> volver al Lobby</li>'],
-    mesa:  ['Sentado a la mesa', '<li><kbd>Clic</kbd> en el cartón o la bola, o <kbd>←→</kbd> y <kbd>Enter</kbd></li><li><kbd>L</kbd> moverte libremente</li><li><kbd>Esc</kbd> volver al Lobby</li>'],
+    mesa:  ['Sentado a la mesa', '<li><kbd>Clic</kbd> en lo que tiene etiqueta, o <kbd>←→</kbd> y <kbd>Enter</kbd></li><li><kbd>L</kbd> moverte libremente</li><li><kbd>Esc</kbd> volver al Lobby</li>'],
     libre: ['Modo libre', `<li><kbd>W A S D</kbd> o <kbd>↑↓</kbd> moverte</li><li><kbd>Ratón</kbd>, <kbd>←→</kbd> o <kbd>Q E</kbd> mirar</li><li><kbd>Clic</kbd> o <kbd>Enter</kbd> tocar</li><li><kbd>R</kbd> volver a la mesa</li><li><kbd>Esc</kbd> ${capturado() ? 'soltar el ratón' : 'volver al Lobby'}</li>`],
     panel: ['Leyendo', '<li><kbd>↑↓</kbd> bajar</li><li><kbd>Esc</kbd> cerrar</li>'],
     viaje: ['…', ''],

@@ -43,7 +43,8 @@
       ],
       "niveles": "Fácil, Normal y Difícil",
       "color": "#2BA3B0",
-      "icono": "cartas"
+      "icono": "cartas",
+      "sala": true
     },
     {
       "id": "bingo",

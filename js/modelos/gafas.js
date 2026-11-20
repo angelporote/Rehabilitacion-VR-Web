@@ -5,7 +5,7 @@
    El frontal mira hacia +Z.
    ========================================================= */
 import * as THREE from 'three';
-import { rrect, mesh, basicGlow } from '../nucleo/util.js?v=202611192241';
+import { rrect, mesh, basicGlow } from '../nucleo/util.js?v=202611201014';
 
 export function crear(){
   const grupo = new THREE.Group();
